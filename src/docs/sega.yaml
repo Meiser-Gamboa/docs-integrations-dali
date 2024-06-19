@@ -23,30 +23,90 @@ components:
       properties:
         line:
           type: string
+          required: true
           description: Address of the client or address of collection of the products.
           example: XXXXXXXXXXXXXXXXXXXXXXXXX
         zip:
           type: string
+          required: false
           description: Postal code of the address where the products are picked up.
           example: "15314"
         route:
           type: string
+          required: false
           description: Address of the client or address of collection of the products.
           example: " "
         streetNumber:
           type: number
+          required: true
           description: Avenue number of the client of collection of the products.
           example: 0
         locality:
           type: string
+          required: false
           description: District of address of the client or collection of products.
           example: XXXXXXXXXXXXXXXXXXXXXXXXX
+        region:
+          type: string
+          required: false
+          description: (deprecated) Province of address of the client or collection of products.
+          example: XXXXXXXXXXXXXXXXXXXXXXXXX
+        latLng:
+          type: array
+          required: true
+          description: Coordinates array of picking address. Must have at least two elements (latitude and longitude.).
+          items:
+            type: number
     origin:
       type: object
       properties:
         name:
           type: string
+          required: true
           description: Contact Names for the recollection.
           example: XXXXXXXXXXXXXXXXXXXXXXXXX
+        phone:
+          type: string
+          required: true
+          description: Contact phone number for the recollection.
+          example: XXXXX-xxxxx
+        email:
+          type: string
+          required: true
+          description: Email for recollection notification.
+          example: mail@mail.com
+        reference:
+          type: string
+          required: true
+          description: References of customer addresses or collection of products.
+          example: "-"
+        notes:
+          type: string
+          required: true
+          description: Additional data that facilitate the collection of products.
+          example: "-"
+        schedule:
+          type: string
+          required: true
+          description: time slot data for collection.
+          example: "08 a 18"
         address:
           "$ref": "#/components/schemas/address"
+    product:
+      properties:
+        description:
+          type: string
+          required: true
+          description: Description or names of the products for collection.
+          example: "XXXXXXX XXXXXXXXX XXXXXXXX"
+        value:
+          type: number
+          required: true
+          description: total number of packages (when sending 0, a single label is created for the shipment, otherwise a label is generated for each package).
+          example: 0
+        quantity:
+          type: number
+          required: false
+          optional: true
+          description: total number of packages (when sending 0, a single label is created for the shipment, otherwise a label is generated for each package).
+          example: 0
