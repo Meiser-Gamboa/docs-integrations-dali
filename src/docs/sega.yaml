@@ -1,0 +1,34 @@
+---
+openapi: 3.0.0
+info:
+  title: SEGA - DALI
+  description: |
+    In order to place orders for Chazki's services, endpoints were enabled to record the delivery and check the orders status. These services are registered in the domain owned by chazki and are detailed in the section below.
+    Find out more about [Chazki here](https://chazki.com/#/).
+    See also our
+  termsOfService: https://chazki.com/tyc.html
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+  - url: https://integrations.ng.paquery.com/sega/api/v2
+    description: Sega Production
+components:
+  schemas:
+    origin:
+      type: object
+      properties:
+        address:
+          type: object
+          properties:
+            line:
+              type: string
+              description: Address of the client or address of collection of the products.
+              example: XXXXXXXXXXXXXXXXXXXXXXXXX
+            zip:
+              type: string
+              description: Postal code of the address where the products are picked up.
+                example: "15314"
