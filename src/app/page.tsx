@@ -15,7 +15,7 @@ export default function Home() {
       <Toolbar id="back-to-top-anchor" />
       <API
         basePath="sega"
-        apiDescriptionUrl="https://raw.githubusercontent.com/Meiser-Gamboa/docs-integrations-dali/main/src/docs/sega.yaml?token=GHSAT0AAAAAACS6KVLBN52ND7TPWSII2IVKZTS6DMQ"
+        apiDescriptionUrl="https://raw.githubusercontent.com/Meiser-Gamboa/docs-integrations-dali/main/src/docs/sega.yaml"
       />
       <ScrollTop >
         <Fab size="small" aria-label="scroll back to top">

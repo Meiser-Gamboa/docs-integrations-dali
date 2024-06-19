@@ -44,4 +44,5 @@ components:
     origin:
       type: object
       properties:
-        "$ref": "#/components/schemas/address"
+        address:
+          "$ref": "#/components/schemas/address"
