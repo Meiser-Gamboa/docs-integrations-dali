@@ -94,6 +94,7 @@ components:
         - schedule
         - Address
     product:
+      type: object
       properties:
         description:
           type: string
@@ -118,7 +119,8 @@ components:
         - value
         - quantity
     dimensions:
-      propierties:
+      type: object
+      properties:
         height:
           type: number
           description: Average package height.
