@@ -12,23 +12,36 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 1.0.0
+  version: 2.0.0
 servers:
   - url: https://integrations.ng.paquery.com/sega/api/v2
     description: Sega Production
 components:
   schemas:
+    address:
+      type: object
+      properties:
+        line:
+          type: string
+          description: Address of the client or address of collection of the products.
+          example: XXXXXXXXXXXXXXXXXXXXXXXXX
+        zip:
+          type: string
+          description: Postal code of the address where the products are picked up.
+          example: "15314"
+        route:
+          type: string
+          description: Address of the client or address of collection of the products.
+          example: " "
+        streetNumber:
+          type: number
+          description: Avenue number of the client of collection of the products.
+          example: 0
+        locality:
+          type: string
+          description: District of address of the client or collection of products.
+          example: XXXXXXXXXXXXXXXXXXXXXXXXX
     origin:
       type: object
       properties:
-        address:
-          type: object
-          properties:
-            line:
-              type: string
-              description: Address of the client or address of collection of the products.
-              example: XXXXXXXXXXXXXXXXXXXXXXXXX
-            zip:
-              type: string
-              description: Postal code of the address where the products are picked up.
-                example: "15314"
+        "$ref": "#/components/schemas/address"
