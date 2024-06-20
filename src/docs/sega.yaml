@@ -33,28 +33,28 @@ paths:
                   "$ref": "#/components/schemas/Orders"
       responses:
         "200":
-          "$ref": "#/components/responses/uploadOrdersResponse200"
+          "$ref": "#/components/responses/responseCreate200"
   "/:tracking":
     get:
       description: This API allows us to see all the states the delivery passed group by services.The services group reference the number of attempts made to deliver the delivery.
-      operationId: status
+      operationId: tracking
       responses:
         "200":
-          "$ref": "#/components/responses/uploadOrdersResponse200"
+          "$ref": "#/components/responses/responseCreate200"
   "/pod/:tracking"
     get:
       description: This API allows us to see all the states the delivery passed group by services.The services group reference the number of attempts made to deliver the delivery.
       operationId: pod
       responses:
         "200":
-          "$ref": "#/components/responses/uploadOrdersResponse200"
+          "$ref": "#/components/responses/responseCreate200"
   "/tracker/:tracking"
     get:
       description: This API allows us to see all the states the delivery passed group by services.The services group reference the number of attempts made to deliver the delivery.
       operationId: tracker
       responses:
         "200":
-          "$ref": "#/components/responses/uploadOrdersResponse200"
+          "$ref": "#/components/responses/responseCreate200"
   "/tag/:tracking"
     get:
       description: This API allows us to see all the states the delivery passed group by services.The services group reference the number of attempts made to deliver the delivery.
