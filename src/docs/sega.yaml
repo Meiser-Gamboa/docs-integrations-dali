@@ -133,4 +133,43 @@ components:
           type: number
           description: Average package length.
           example: 0
+    shipment:
+      type: object
+      properties:
+        tracking:
+          type: string
+          description: Order code or tracking code, with this code you can track the order.
+          example: XXXXX-12345
+        type:
+          type: string
+          description: |
+            Code of the delivery service type will be carried out. It can take the following values :
 
+            | Service (All the countries) | Description |
+            | ------------- | ------------ |
+            | REGULAR | The order will be sent on the scheduled day according to the customer's configuration. |
+            | NEXT DAY | The order will be shipped the next day. |
+            | SAME DAY | The order will be sent on the same day if it is received before the cut-off time, otherwise it will be sent the next day (The cut-off time can be requested from the commercial area) |
+          example: "SAME DAY"
+        cod:
+          type: number
+          description: Payment is made at the destination address (cash on delivery), the amount to be charged to the final recipient is indicated in the shipmentPrice field.
+          example: 0
+        change:
+          type: bool
+          description: Indicador de lógica inversa, nos permite realizar en caso de ser necesario la recogida de pedidos devueltos por el cliente.
+          example: false
+        product:
+          "$ref": "#/components/schemas/product"
+        origin:
+          "$ref": "#/components/schemas/origin"
+        destination:
+          "$ref": "#/components/schemas/origin"
+      required:
+        - tracking
+        - type
+        - cod
+        - change
+        - product
+        - origin
+        - destination
