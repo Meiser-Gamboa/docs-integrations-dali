@@ -28,7 +28,9 @@ paths:
           application/json:
             schema:
               shipment:
-                "$ref": "#/components/schemas/Orders"
+                type: object
+                properties:
+                  "$ref": "#/components/schemas/Orders"
       responses:
         "200":
           "$ref": "#/components/responses/uploadOrdersResponse200"
