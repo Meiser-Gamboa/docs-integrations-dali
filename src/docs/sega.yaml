@@ -14,8 +14,22 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   version: 2.0.0
 servers:
-  - url: https://integrations.ng.paquery.com/sega/api/v2
+  - url: https://integrations.ng.paquery.com/sega/api/v2/shipment
     description: Sega Production
+
+paths:
+  "/create":
+    post:
+      description: This endpoint allows to register a delivery.
+      operationId: create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              shipment:
+                "$ref": "#/components/schemas/Orders"
+
 components:
   schemas:
     geoData:
