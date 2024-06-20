@@ -18,6 +18,17 @@ servers:
     description: Sega Production
 components:
   schemas:
+    geoData:
+      type: object
+      properties:
+        lat:
+          type: number
+          description: Coordinates of picking address (latitude).
+          example: -12.0052
+        lng:
+          type: number
+          description: Coordinates of picking address (longitude).
+          example: -90.0034
     address:
       type: object
       description: It is possible to send null when it belongs to the origin structure and you want to take the address registered in the marketplace by default.
@@ -47,10 +58,7 @@ components:
           description: (deprecated) Province of address of the client or collection of products.
           example: XXXXXXXXXXXXXXXXXXXXXXXXX
         latLng:
-          type: array
-          description: Coordinates array of picking address. Must have at least two elements (latitude and longitude.).
-          items:
-            type: number
+          "$ref": "#/components/schemas/geoData"
       required:
         - line
         - zip
