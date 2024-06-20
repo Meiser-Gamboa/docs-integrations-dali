@@ -37,6 +37,8 @@ paths:
     get:
       description: This API allows us to see all the states the delivery passed group by services.The services group reference the number of attempts made to deliver the delivery.
       operationId: Tracking Order
+      parameters:
+        - "$ref": '#/components/parameters/queryEnterpriseKey'
       responses:
         "200":
           "$ref": "#/components/responses/responseCreate200"
@@ -44,6 +46,8 @@ paths:
     get:
       description: This API allows us to see all the states the delivery passed group by services.The services group reference the number of attempts made to deliver the delivery.
       operationId: Pod
+      parameters:
+        - "$ref": '#/components/parameters/queryEnterpriseKey'
       responses:
         "200":
           "$ref": "#/components/responses/responseCreate200"
@@ -51,6 +55,8 @@ paths:
     get:
       description: This API allows us to see all the states the delivery passed group by services.The services group reference the number of attempts made to deliver the delivery.
       operationId: Tracker
+      parameters:
+        - "$ref": '#/components/parameters/queryEnterpriseKey'
       responses:
         "200":
           "$ref": "#/components/responses/responseCreate200"
@@ -58,6 +64,8 @@ paths:
     get:
       description: This API allows us to see all the states the delivery passed group by services.The services group reference the number of attempts made to deliver the delivery.
       operationId: Tag Tracking
+      parameters:
+        - "$ref": '#/components/parameters/queryEnterpriseKey'
       responses:
         "200":
           "$ref": "#/components/responses/uploadOrdersResponse200"
