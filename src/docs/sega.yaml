@@ -30,7 +30,7 @@ paths:
               shipment:
                 type: object
                 properties:
-                  "$ref": "#/components/schemas/Orders"
+                  "$ref": "#/components/schemas/shipment"
       responses:
         "200":
           "$ref": "#/components/responses/responseCreate200"
@@ -228,6 +228,7 @@ components:
         - product
         - origin
         - destination
+    
   responses:
     responseCreate200:
       description: Successfully response object.
