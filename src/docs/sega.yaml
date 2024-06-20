@@ -41,21 +41,21 @@ paths:
       responses:
         "200":
           "$ref": "#/components/responses/responseCreate200"
-  "/pod/:tracking"
+  "/pod/:tracking":
     get:
       description: This API allows us to see all the states the delivery passed group by services.The services group reference the number of attempts made to deliver the delivery.
       operationId: Pod
       responses:
         "200":
           "$ref": "#/components/responses/responseCreate200"
-  "/tracker/:tracking"
+  "/tracker/:tracking":
     get:
       description: This API allows us to see all the states the delivery passed group by services.The services group reference the number of attempts made to deliver the delivery.
       operationId: Tracker
       responses:
         "200":
           "$ref": "#/components/responses/responseCreate200"
-  "/tag/:tracking"
+  "/tag/:tracking":
     get:
       description: This API allows us to see all the states the delivery passed group by services.The services group reference the number of attempts made to deliver the delivery.
       operationId: Tag Tracking
@@ -228,7 +228,11 @@ components:
         - product
         - origin
         - destination
-    
+    createShipment:
+      type: object
+      properties:
+        shipment:
+          "$ref": "#/components/schemas/shipment"
   responses:
     responseCreate200:
       description: Successfully response object.
