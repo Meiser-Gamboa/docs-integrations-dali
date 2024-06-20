@@ -22,6 +22,8 @@ paths:
     post:
       description: This endpoint allows to register a delivery.
       operationId: Create Order 
+      parameters:
+        - "$ref": '#/components/parameters/queryEnterpriseKey'
       requestBody:
         required: true
         content:
