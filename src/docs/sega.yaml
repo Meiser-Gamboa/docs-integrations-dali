@@ -21,7 +21,7 @@ paths:
   "/create":
     post:
       description: This endpoint allows to register a delivery.
-      operationId: create
+      operationId: Create Order 
       requestBody:
         required: true
         content:
@@ -37,28 +37,28 @@ paths:
   "/:tracking":
     get:
       description: This API allows us to see all the states the delivery passed group by services.The services group reference the number of attempts made to deliver the delivery.
-      operationId: tracking
+      operationId: Tracking Order
       responses:
         "200":
           "$ref": "#/components/responses/responseCreate200"
   "/pod/:tracking"
     get:
       description: This API allows us to see all the states the delivery passed group by services.The services group reference the number of attempts made to deliver the delivery.
-      operationId: pod
+      operationId: Pod
       responses:
         "200":
           "$ref": "#/components/responses/responseCreate200"
   "/tracker/:tracking"
     get:
       description: This API allows us to see all the states the delivery passed group by services.The services group reference the number of attempts made to deliver the delivery.
-      operationId: tracker
+      operationId: Tracker
       responses:
         "200":
           "$ref": "#/components/responses/responseCreate200"
   "/tag/:tracking"
     get:
       description: This API allows us to see all the states the delivery passed group by services.The services group reference the number of attempts made to deliver the delivery.
-      operationId: tagTracking
+      operationId: Tag Tracking
       responses:
         "200":
           "$ref": "#/components/responses/uploadOrdersResponse200"
