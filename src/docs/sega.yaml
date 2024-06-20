@@ -115,8 +115,6 @@ components:
           "$ref": "#/components/schemas/geoData"
       required:
         - line
-        - zip
-        - streetNumber
         - latLng
     origin:
       type: object
@@ -151,9 +149,6 @@ components:
         - name
         - phone
         - email
-        - reference
-        - notes
-        - schedule
         - Address
     product:
       type: object
@@ -178,8 +173,6 @@ components:
           "$ref": "#/components/schemas/dimensions"
       required:
         - description
-        - value
-        - quantity
     dimensions:
       type: object
       properties:
@@ -209,7 +202,6 @@ components:
 
             | Service (All the countries) | Description |
             | ------------- | ------------ |
-            | REGULAR | The order will be sent on the scheduled day according to the customer's configuration. |
             | NEXT DAY | The order will be shipped the next day. |
             | SAME DAY | The order will be sent on the same day if it is received before the cut-off time, otherwise it will be sent the next day (The cut-off time can be requested from the commercial area) |
           example: "SAME DAY"
@@ -230,7 +222,6 @@ components:
       required:
         - tracking
         - type
-        - cod
         - change
         - product
         - origin
@@ -248,21 +239,43 @@ components:
           schema:
             type: object
             properties:
-              success:
-                type: boolean
-                description: Indicates if the success is correct.
-                example: true
-              ordersWithErrors:
-                description: Number of orders with errors.
-                type: number
-                example: 0
-              ordersWithoutErrors:
-                description: Number of orders without error.
-                type: number
-                example: 1
-              errorsDetails:
-                description: Brief description of the errors found in the orders..
-                type: array
+              shipment:
+                type: object
+                description: Data received in the creation of orders to carry out the shipment.
+                properties:
+                  tracking:
+                    type: string
+                    description: Order code or tracking code, with this code you can track the order.
+                    example: XXXXX-12345
+                  type:
+                    type: string
+                    description: |
+                      Code of the delivery service type will be carried out. It can take the following values :
+
+                      | Service (All the countries) | Description |
+                      | ------------- | ------------ |
+                      | REGULAR | The order will be sent on the scheduled day according to the customer's configuration. |
+                      | NEXT DAY | The order will be shipped the next day. |
+                      | SAME DAY | The order will be sent on the same day if it is received before the cut-off time, otherwise it will be sent the next day (The cut-off time can be requested from the commercial area) |
+                    example: "SAME DAY"
+                  #kind:
+                  #  type: string
+                  #  description: Type of service at a commercial level.
+                  #  example: "B2B"
+                  change:
+                    type: bool
+                    description: Indicador de lógica inversa, nos permite realizar en caso de ser necesario la recogida de pedidos devueltos por el cliente.
+                    example: false
+                  product:
+                    "$ref": "#/components/schemas/product"
+                  origin:
+                    "$ref": "#/components/schemas/origin"
+                  destination:
+                    "$ref": "#/components/schemas/origin"
+                  status:
+                    type: string
+                    description: Delivery status.
+                    example: Created
   parameters:
     queryEnterpriseKey:
       name: key
@@ -276,9 +289,3 @@ components:
       explode: false
       schema:
         type: string
-  securitySchemes:
-    key:
-      name: key
-      type: params
-      in: query
-      description: Access key for api.
