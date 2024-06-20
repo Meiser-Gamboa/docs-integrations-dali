@@ -27,7 +27,7 @@ paths:
         content:
           application/json:
             schema:
-              "$ref": "#/components/requestBodies/createShipment"
+              "$ref": "#/components/schemas/createShipment"
       responses:
         "200":
           "$ref": "#/components/responses/responseCreate200"
@@ -225,7 +225,6 @@ components:
         - product
         - origin
         - destination
-  requestBodies:
     createShipment:
       type: object
       properties:
@@ -234,26 +233,26 @@ components:
   responses:
     "responseCreate200":
       description: Successfully response object.
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                success:
-                  type: boolean
-                  description: Indicates if the success is correct.
-                  example: true
-                ordersWithErrors:
-                  description: Number of orders with errors.
-                  type: number
-                  example: 0
-                ordersWithoutErrors:
-                  description: Number of orders without error.
-                  type: number
-                  example: 1
-                errorsDetails:
-                  description: Brief description of the errors found in the orders..
-                  type: array
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates if the success is correct.
+                example: true
+              ordersWithErrors:
+                description: Number of orders with errors.
+                type: number
+                example: 0
+              ordersWithoutErrors:
+                description: Number of orders without error.
+                type: number
+                example: 1
+              errorsDetails:
+                description: Brief description of the errors found in the orders..
+                type: array
   parameters:
     queryEnterpriseKey:
       name: key
