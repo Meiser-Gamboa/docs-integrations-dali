@@ -38,7 +38,9 @@ paths:
           "$ref": "#/components/responses/responseCreate200"
         "500":
           "$ref": "#/components/responses/responseCreate500"
-  "/tracker/:tracking":
+  "/tracker/{tracking}":
+    parameters: 
+      - "$ref": '#/components/parameters/tracking'
     get:
       description: |
         En este endpoint permite realizar el seguimiento del envio, 
@@ -46,11 +48,12 @@ paths:
       operationId: Tracking Orden
       parameters: 
         - "$ref": '#/components/parameters/queryEnterpriseKey'
-        - "$ref": '#/components/parameters/trackingParam'
       responses:
         "200":
           "$ref": "#/components/responses/responseStatus200"
-  "/pod/:tracking":
+  "/pod/{tracking}":
+    parameters: 
+      - "$ref": '#/components/parameters/tracking'
     get:
       description: This API allows us to see all the states the delivery passed group by services.The services group reference the number of attempts made to deliver the delivery.
       operationId: Pod
@@ -59,7 +62,9 @@ paths:
       responses:
         "200":
           "$ref": "#/components/responses/responseCreate200"
-  "/tag/:tracking":
+  "/tag/{tracking}":
+    parameters: 
+      - "$ref": '#/components/parameters/tracking'
     get:
       description: |
         Con este endpoint obtiene el listado de etiqueta del envío.
@@ -69,7 +74,9 @@ paths:
       responses:
         "200":
           "$ref": "#/components/responses/responseLabel200"
-  "/:tracking":
+  "/{tracking}":
+    parameters: 
+      - "$ref": '#/components/parameters/tracking'
     get:
       description: This API allows us to see all the states the delivery passed group by services.The services group reference the number of attempts made to deliver the delivery.
       operationId: Tracker
@@ -494,7 +501,7 @@ components:
       explode: false
       schema:
         type: string
-    trackingParam:
+    tracking:
       name: tracking
       in: path
       description: |
