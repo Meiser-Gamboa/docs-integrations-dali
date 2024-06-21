@@ -118,12 +118,12 @@ paths:
       - "$ref": '#/components/parameters/tracking'
     get:
       description: This API allows us to see all the states the delivery passed group by services.The services group reference the number of attempts made to deliver the delivery.
-      operationId: Tracker
+      operationId: Detalles de Orden
       parameters:
         - "$ref": '#/components/parameters/queryEnterpriseKey'
       responses:
         "200":
-          "$ref": "#/components/responses/responseCreate200"
+          "$ref": "#/components/responses/responseDetails200"
         400:
           "$ref": "#/components/responses/responsePod400"
         404:
@@ -423,10 +423,6 @@ components:
                       límite, en caso contrario se enviará al día siguiente (La hora 
                       límite se puede solicitar al área comercial).
                     example: "SAME DAY"
-                  #kind:
-                  #  type: string
-                  #  description: Type of service at a commercial level.
-                  #  example: "B2B"
                   change:
                     type: bool
                     description: |
@@ -570,6 +566,72 @@ components:
                 description: |
                   PDF con los detalles de entrega en base 64.
                 example: "data:application/pdf;base64,JVBERi0xLjcKJeLjz9.......MTQKc3RhcnR4cmVmCjMxNzMKJSVFT0YK"
+    "responseDetails200":
+      description: Detalles total de la orden.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              tracking:
+                type: string
+                description: Código de orden o código de seguimiento, con este código podrás rastrear el pedido.
+                example: XXXXX-12345
+              type:
+                type: string
+                description: |
+                  Código del tipo de servicio de entrega. 
+                  
+                  Puede tomar los siguientes valores:
+
+                  | Servicio (Todos los países) | Descripción |
+                  | ------------- | ------------ |
+                  | NEXT DAY | El pedido se enviará al día siguiente. |
+                  | SAME DAY | El pedido se enviará el mismo día. |
+
+                  **Nota:** Paara el servicio 'NEXT DAY' se tiene una hora limite
+                  en el cual se realizara la entrega si se recibe antes de la hora 
+                  límite, en caso contrario se enviará al día siguiente (La hora 
+                  límite se puede solicitar al área comercial).
+                example: "SAME DAY"
+              cod:
+                type: number
+                description: |
+                  Para el valor 0 (false) es envio se indica como pagado, para el 
+                  valor 1 (true) el pago se realiza en la dirección de destino 
+                  (contra reembolso), el importe a cobrar al destinatario final es 
+                  enviado en el campo value dentro de product.
+                example: 0
+              kind:
+                type: string
+                description: Type of service at a commercial level.
+                example: "B2B"
+              created:
+                type: string
+                description: |
+                  Fecha de creación en formato RFC-3339 (ISO-8601) en UTC.
+                example: "2024-06-20T18:21:21Z"              
+              update:
+                type: string
+                description: |
+                  Fecha de actualizacion en formato RFC-3339 (ISO-8601) en UTC.
+                example: "2024-06-24T11:20:10Z"
+              status:
+                type: string
+                description: Estado del envío.
+                example: CROSSDOCKED
+              product:
+                "$ref": "#/components/schemas/product"
+              origin:
+                "$ref": "#/components/schemas/origin"
+              destination:
+                "$ref": "#/components/schemas/origin"
+              history:
+                type: array
+                items: 
+                  type: object
+                  "$ref": "#/components/responses/historyResponse"
+
   parameters:
     queryEnterpriseKey:
       name: key
