@@ -40,7 +40,9 @@ paths:
           "$ref": "#/components/responses/responseCreate500"
   "/tracker/:tracking":
     get:
-      description: This API allows us to see all the states the delivery passed group by services.The services group reference the number of attempts made to deliver the delivery.
+      description: |
+        En este endpoint permite realizar el seguimiento del envio, 
+        también el historial de cambios de estado.
       operationId: Tracking Orden
       parameters: 
         - "$ref": '#/components/parameters/queryEnterpriseKey'
@@ -59,13 +61,14 @@ paths:
           "$ref": "#/components/responses/responseCreate200"
   "/tag/:tracking":
     get:
-      description: This API allows us to see all the states the delivery passed group by services.The services group reference the number of attempts made to deliver the delivery.
-      operationId: Tag Tracking
+      description: |
+        Con este endpoint obtiene el listado de etiqueta del envío.
+      operationId: Etiqueta (tag)
       parameters:
         - "$ref": '#/components/parameters/queryEnterpriseKey'
       responses:
         "200":
-          "$ref": "#/components/responses/uploadOrdersResponse200"
+          "$ref": "#/components/responses/responseLabel200"
   "/:tracking":
     get:
       description: This API allows us to see all the states the delivery passed group by services.The services group reference the number of attempts made to deliver the delivery.
@@ -473,6 +476,10 @@ components:
                     type: string
                     description: Enlace de seguimiento de pedido.
                     example: "https://tracking.ng.paquery.com/package/MzU1MTM5Ng"
+    "responseLabel200":
+      description: |
+        Se obtiene un archivo pdf con las etiquetas 
+        que se visualiza en el mismo navegador.
   parameters:
     queryEnterpriseKey:
       name: key
@@ -493,7 +500,5 @@ components:
       description: |
         Código de orden o código de seguimiento
       required: true
-      style: form
-      explode: false
       schema:
         type: string
