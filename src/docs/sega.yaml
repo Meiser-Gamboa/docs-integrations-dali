@@ -46,7 +46,7 @@ paths:
         - "$ref": '#/components/parameters/queryEnterpriseKey'
       responses:
         "200":
-          "$ref": "#/components/responses/responseCreate200"
+          "$ref": "#/components/responses/responseStatus200"
   "/pod/:tracking":
     get:
       description: This API allows us to see all the states the delivery passed group by services.The services group reference the number of attempts made to deliver the delivery.
@@ -373,7 +373,7 @@ components:
                     example: "https://tracking.ng.paquery.com/package/MzU1MTM5Ng"
     "responseCreate500":
       description: El error se mostrará en texto simple indicando el motivo.
-    "responseCreate200":
+    "responseStatus200":
       description: Successfully response object.
       content:
         application/json:
