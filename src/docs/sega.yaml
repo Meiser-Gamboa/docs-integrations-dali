@@ -38,10 +38,10 @@ paths:
           "$ref": "#/components/responses/responseCreate200"
         "500":
           "$ref": "#/components/responses/responseCreate500"
-  "/:tracking":
+  "/tracker/:tracking":
     get:
       description: This API allows us to see all the states the delivery passed group by services.The services group reference the number of attempts made to deliver the delivery.
-      operationId: Tracking Order
+      operationId: Tracking Orden
       parameters:
         - "$ref": '#/components/parameters/queryEnterpriseKey'
       responses:
@@ -56,15 +56,6 @@ paths:
       responses:
         "200":
           "$ref": "#/components/responses/responseCreate200"
-  "/tracker/:tracking":
-    get:
-      description: This API allows us to see all the states the delivery passed group by services.The services group reference the number of attempts made to deliver the delivery.
-      operationId: Tracker
-      parameters:
-        - "$ref": '#/components/parameters/queryEnterpriseKey'
-      responses:
-        "200":
-          "$ref": "#/components/responses/responseCreate200"
   "/tag/:tracking":
     get:
       description: This API allows us to see all the states the delivery passed group by services.The services group reference the number of attempts made to deliver the delivery.
@@ -74,6 +65,15 @@ paths:
       responses:
         "200":
           "$ref": "#/components/responses/uploadOrdersResponse200"
+  "/:tracking":
+    get:
+      description: This API allows us to see all the states the delivery passed group by services.The services group reference the number of attempts made to deliver the delivery.
+      operationId: Tracker
+      parameters:
+        - "$ref": '#/components/parameters/queryEnterpriseKey'
+      responses:
+        "200":
+          "$ref": "#/components/responses/responseCreate200"
 
 components:
   schemas:
@@ -296,6 +296,45 @@ components:
           type: string
           description: Datos de franja horaria para el recojo o entrega de productos.
           example: "08 a 18"
+    contactResponse:
+      type: object
+      properties:
+        reference:
+          type: string
+          description: Referencias de direcciones de clientes para el recojo o entrega de los productos.
+          example: "-"
+        notes:
+          type: string
+          description: Datos adicionales que facilitan la recojo o entrega de productos.
+          example: "-"
+        schedule:
+          type: string
+          description: Datos de franja horaria para el recojo o entrega de productos. 
+          example: "-"
+        address:
+          type: object
+          properties:
+            line:
+              type: string
+              description: Dirección de recojo o entrega de los productos.
+              example: XXXXXXXXXXXXXXXXXXXXXXXXX
+            latLng:
+              "$ref": "#/components/schemas/geoData"
+    historyResponse:
+      type: object
+      properties:
+        date:
+          type: string
+          description: Fecha de evento en formato RFC-3339 (ISO-8601) en UTC.
+          example: "2024-06-20T19:05:08Z"
+        description:
+          type: string
+          description: Detalle del evento generado.
+          example: "En Chazki"
+        location:
+          type: string
+          description: Localidad o distrito donde se genera el evento.
+          example: "Buenos Aires"
     "responseCreate200":
       description: Successfully response object.
       content:
@@ -384,6 +423,11 @@ components:
                 type: object
                 description: Datos recibidos en la creación de ordenes para realizar el envío.
                 properties:
+                  created:
+                    type: string
+                    description: |
+                      Fecha de creación en formato RFC-3339 (ISO-8601) en UTC.
+                    example: "2024-06-20T18:21:21Z"
                   tracking:
                     type: string
                     description: Código de orden o código de seguimiento, con este código podrás rastrear el pedido.
@@ -409,40 +453,20 @@ components:
                     type: string
                     description: Type of service at a commercial level.
                     example: "B2B"
-                  change:
-                    type: bool
-                    description: |
-                      Indicador de lógica inversa, nos permite realizar en caso 
-                      de ser necesario el recojo de ordenes para devolución desde 
-                      el cliente final.
+                  company:
+                    type: string
+                    description: Nombre asociado al marketplace.
                     example: false
-                  product:
-                    type: object
-                    properties:
-                      size:
-                        type: string
-                        description: Tamaño promedio de los paquetes.
-                        example: "Chico"
-                      dimensions:
-                        "$ref": "#/components/schemas/dimensions"
-                  origin:
-                    "$ref": "#/components/responses/addressResponse"
-                  destination:
-                    "$ref": "#/components/responses/addressResponse"
-                  status:
-                    type: string
-                    description: Estado del envío.
-                    example: QUEUE
-                  created:
-                    type: string
-                    description: |
-                      Fecha de creación en formato RFC-3339 (ISO-8601) en UTC.
-                    example: "2024-06-20T18:21:21Z"
-                  removed:
+                  contact:
+                    "$ref": "#/components/responses/contactResponse"
+                  history:
+                    type: array
+                    items: 
+                      type: object
+                      "$ref": "#/components/responses/historyResponse"
+                  updatable:
                     type: bool
-                    description: |
-                      Indicador que informa si el pedido se encuentra en 
-                      estado cancelado, eliminado y/o anulado.
+                    description: Indica si es posible actualizar los datos de la orden.
                     example: false
                   trackingUrl:
                     type: string
