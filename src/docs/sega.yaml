@@ -42,8 +42,9 @@ paths:
     get:
       description: This API allows us to see all the states the delivery passed group by services.The services group reference the number of attempts made to deliver the delivery.
       operationId: Tracking Orden
-      parameters:
+      parameters: 
         - "$ref": '#/components/parameters/queryEnterpriseKey'
+        - "$ref": '#/components/parameters/trackingParam'
       responses:
         "200":
           "$ref": "#/components/responses/responseStatus200"
@@ -481,6 +482,16 @@ components:
         por Chazki para identificar la empresa, se 
         obtiene una vez generada la empresa dentro de 
         Chazki por el área comercial.
+      required: true
+      style: form
+      explode: false
+      schema:
+        type: string
+    trackingParam:
+      name: tracking
+      in: path
+      description: |
+        Código de orden o código de seguimiento
       required: true
       style: form
       explode: false
