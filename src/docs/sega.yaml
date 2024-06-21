@@ -96,7 +96,7 @@ components:
         para la estura 'origen' es posible enviar null si se desea tomar la dirección 
         registrada en el marketplace por defecto.
 
-        *Nota:* En el campo 'line' debe venir la dirección, el número de la calle, localidad/barrio, 
+        **Nota:** En el campo 'line' debe venir la dirección, el número de la calle, localidad/barrio, 
         ciudad, país, código postal. No es obligatorio que venga toda esta información, pero 
         mientras más detalle mayor probabilidad de que sea localizada. Solo datos de dirección, 
         no comentarios acerca de la dirección.
@@ -181,7 +181,7 @@ components:
           description: |
             Número total de paquetes.
             
-            *Nota:* al enviar 0, se crea una sola etiqueta para el envío, de 
+            **Nota:** al enviar 0, se crea una sola etiqueta para el envío, de 
             lo contrario se genera una etiqueta según la cantidad de paquetes.
           example: 0
         size:
@@ -226,7 +226,7 @@ components:
             | NEXT DAY | El pedido se enviará al día siguiente. |
             | SAME DAY | El pedido se enviará el mismo día. |
 
-            *Nota:* Paara el servicio 'NEXT DAY' se tiene una hora limite
+            **Nota:** Paara el servicio 'NEXT DAY' se tiene una hora limite
             en el cual se realizara la entrega si se recibe antes de la hora 
             límite, en caso contrario se enviará al día siguiente (La hora 
             límite se puede solicitar al área comercial).
@@ -270,31 +270,31 @@ components:
       properties:
         address:
           type: string
-          description: Address of the client or address of collection of the products.
+          description: Dirección de recojo o entrega de los productos.
           example: "Calle F. Valle Riestra 576, San Isidro, Lima 15074, Perú"
         name:
           type: string
-          description: Contact Names for the recollection.
+          description: Nombres de contacto para el recojo o entrega de productos.
           example: XXXXXXXXXXXXXXXXXXXXXXXXX
         phone:
           type: string
-          description: Contact phone number for the recollection.
+          description: Numero de telefono/celular de contacto para el recojo o entrega de productos.
           example: XXXXX-xxxxx
         email:
           type: string
-          description: Email for recollection notification.
+          description: Email para notificación el recojo o entrega de los productos.
           example: mail@mail.com
         reference:
           type: string
-          description: References of customer addresses or collection of products.
+          description: Referencias de direcciones de clientes para el recojo o entrega de los productos.
           example: "-"
         notes:
           type: string
-          description: Additional data that facilitate the collection of products.
+          description: Datos adicionales que facilitan la recojo o entrega de productos.
           example: "-"
         schedule:
           type: string
-          description: time slot data for collection.
+          description: Datos de franja horaria para el recojo o entrega de productos.
           example: "08 a 18"
     "responseCreate200":
       description: Successfully response object.
@@ -305,22 +305,28 @@ components:
             properties:
               shipment:
                 type: object
-                description: Data received in the creation of orders to carry out the shipment.
+                description: Datos recibidos en la creación de ordenes para realizar el envío.
                 properties:
                   tracking:
                     type: string
-                    description: Order code or tracking code, with this code you can track the order.
+                    description: Código de orden o código de seguimiento, con este código podrás rastrear el pedido.
                     example: XXXXX-12345
                   type:
                     type: string
                     description: |
-                      Code of the delivery service type will be carried out. It can take the following values :
+                      Código del tipo de servicio de entrega. 
+                      
+                      Puede tomar los siguientes valores:
 
-                      | Service (All the countries) | Description |
+                      | Servicio (Todos los países) | Descripción |
                       | ------------- | ------------ |
-                      | REGULAR | The order will be sent on the scheduled day according to the customer's configuration. |
-                      | NEXT DAY | The order will be shipped the next day. |
-                      | SAME DAY | The order will be sent on the same day if it is received before the cut-off time, otherwise it will be sent the next day (The cut-off time can be requested from the commercial area) |
+                      | NEXT DAY | El pedido se enviará al día siguiente. |
+                      | SAME DAY | El pedido se enviará el mismo día. |
+
+                      **Nota:** Paara el servicio 'NEXT DAY' se tiene una hora limite
+                      en el cual se realizara la entrega si se recibe antes de la hora 
+                      límite, en caso contrario se enviará al día siguiente (La hora 
+                      límite se puede solicitar al área comercial).
                     example: "SAME DAY"
                   #kind:
                   #  type: string
@@ -328,14 +334,17 @@ components:
                   #  example: "B2B"
                   change:
                     type: bool
-                    description: Reverse logic indicator, which allows us to collect orders returned by the customer if necessary.
+                    description: |
+                      Indicador de lógica inversa, nos permite realizar en caso 
+                      de ser necesario el recojo de ordenes para devolución desde 
+                      el cliente final.
                     example: false
                   product:
                     type: object
                     properties:
                       size:
                         type: string
-                        description: total number of packages (when sending 0, a single label is created for the shipment, otherwise a label is generated for each package).
+                        description: Tamaño promedio de los paquetes.
                         example: "Chico"
                       dimensions:
                         "$ref": "#/components/schemas/dimensions"
@@ -345,30 +354,34 @@ components:
                     "$ref": "#/components/responses/addressResponse"
                   status:
                     type: string
-                    description: Delivery status.
+                    description: Estado del envío.
                     example: QUEUE
                   created:
                     type: string
-                    description: Creation date in RFC-3339 (ISO-8601) format in UTC.
+                    description: |
+                      Fecha de creación en formato RFC-3339 (ISO-8601) en UTC.
                     example: "2024-06-20T18:21:21Z"
                   removed:
                     type: bool
-                    description: Indicator that informs whether the order is in cancelled, deleted and/or voided status.
+                    description: |
+                      Indicador que informa si el pedido se encuentra en 
+                      estado cancelado, eliminado y/o anulado.
                     example: false
                   trackingUrl:
                     type: string
-                    description: Order tracking link.
+                    description: Enlace de seguimiento de pedido.
                     example: "https://tracking.ng.paquery.com/package/MzU1MTM5Ng"
     "responseCreate500":
-      description: The error will be displayed in plain text indicating the reason..
+      description: El error se mostrará en texto simple indicando el motivo.
   parameters:
     queryEnterpriseKey:
       name: key
       in: query
       description: |
-        Company identifier, it is a hash generated by Chazki to
-        identify the company, it is obtained once the company has
-        been generated within Chazki by the commercial area.
+        Identificador de empresa, es un hash generado 
+        por Chazki para identificar la empresa, se 
+        obtiene una vez generada la empresa dentro de 
+        Chazki por el área comercial.
       required: true
       style: form
       explode: false
