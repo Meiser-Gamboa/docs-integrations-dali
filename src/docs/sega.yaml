@@ -23,7 +23,7 @@ servers:
 paths:
   "/create":
     post:
-      description: Este punto final permite registrar un envio.
+      description: Este endpoint permite registrar un envio.
       operationId: Crear Orden
       parameters:
         - "$ref": '#/components/parameters/queryEnterpriseKey'
@@ -91,31 +91,39 @@ components:
           example: -90.0034
     address:
       type: object
-      description: It is possible to send null when it belongs to the origin structure and you want to take the address registered in the marketplace by default.
+      description: |
+        Estructura con la información de recojo o entrega,
+        para la estura 'origen' es posible enviar null si se desea tomar la dirección 
+        registrada en el marketplace por defecto.
+
+        *Nota:* En el campo 'line' debe venir la dirección, el número de la calle, localidad/barrio, 
+        ciudad, país, código postal. No es obligatorio que venga toda esta información, pero 
+        mientras más detalle mayor probabilidad de que sea localizada. Solo datos de dirección, 
+        no comentarios acerca de la dirección.
       properties:
         line:
           type: string
-          description: Address of the client or address of collection of the products.
+          description: Dirección de recojo o entrega de los productos.
           example: XXXXXXXXXXXXXXXXXXXXXXXXX
         zip:
           type: string
-          description: Postal code of the address where the products are picked up.
+          description: Código postal de la dirección para el recojo o entrega de los productos.
           example: "15314"
         route:
           type: string
-          description: Address of the client or address of collection of the products.
+          description: Nombre de la dirección para el recojo o entrega de los productos.
           example: " "
         streetNumber:
           type: number
-          description: Avenue number of the client of collection of the products.
+          description: Numero de la dirección para el recojo o entrega de los productos.
           example: 0
         locality:
           type: string
-          description: District of address of the client or collection of products.
+          description: Distrito o localidad donde se realiza el recojo o entrega de los productos.
           example: XXXXXXXXXXXXXXXXXXXXXXXXX
         region:
           type: string
-          description: (deprecated) Province of address of the client or collection of products.
+          description: (deprecated) Provincia donde se realiza el recojo o entrega de los productos
           example: XXXXXXXXXXXXXXXXXXXXXXXXX
         latLng:
           "$ref": "#/components/schemas/geoData"
@@ -127,27 +135,27 @@ components:
       properties:
         name:
           type: string
-          description: Contact Names for the recollection.
+          description: Nombres de contacto para el recojo o entrega de productos.
           example: XXXXXXXXXXXXXXXXXXXXXXXXX
         phone:
           type: string
-          description: Contact phone number for the recollection.
+          description: Numero de telefono/celular de contacto para el recojo o entrega de productos.
           example: XXXXX-xxxxx
         email:
           type: string
-          description: Email for recollection notification.
+          description: Email para notificación el recojo o entrega de los productos.
           example: mail@mail.com
         reference:
           type: string
-          description: References of customer addresses or collection of products.
+          description: Referencias de direcciones de clientes para el recojo o entrega de los productos.
           example: "-"
         notes:
           type: string
-          description: Additional data that facilitate the collection of products.
+          description: Datos adicionales que facilitan la recojo o entrega de productos.
           example: "-"
         schedule:
           type: string
-          description: time slot data for collection.
+          description: Datos de franja horaria para el recojo o entrega de productos.
           example: "08 a 18"
         address:
           "$ref": "#/components/schemas/address"
@@ -161,19 +169,24 @@ components:
       properties:
         description:
           type: string
-          description: Description or names of the products for collection.
+          description: Descripción o nombres de los productos de la orden.
           example: "XXXXXXX XXXXXXXXX XXXXXXXX"
         value:
           type: number
-          description: total number of packages (when sending 0, a single label is created for the shipment, otherwise a label is generated for each package).
+          description: |
+            Precio o valor de paquetes.
           example: 0
         quantity:
           type: number
-          description: total number of packages (when sending 0, a single label is created for the shipment, otherwise a label is generated for each package).
+          description: |
+            Número total de paquetes.
+            
+            *Nota:* al enviar 0, se crea una sola etiqueta para el envío, de 
+            lo contrario se genera una etiqueta según la cantidad de paquetes.
           example: 0
         size:
           type: string
-          description: total number of packages (when sending 0, a single label is created for the shipment, otherwise a label is generated for each package).
+          description: Tamaño promedio de los paquetes.
           example: "Chico"
         dimensions:
           "$ref": "#/components/schemas/dimensions"
@@ -184,32 +197,35 @@ components:
       properties:
         height:
           type: number
-          description: Average package height.
+          description: Altura promedio de los paquetes.
           example: 0
         width:
           type: number
-          description: Average package width.
+          description: Ancho promedio de los paquetes.
           example: 0
         length:
           type: number
-          description: Average package length.
+          description: Largo promedio de los paquetes.
           example: 0
     shipment:
       type: object
       properties:
         tracking:
           type: string
-          description: Order code or tracking code, with this code you can track the order.
+          description: Código de orden o código de seguimiento, con este código podrás rastrear el pedido.
           example: XXXXX-12345
         type:
           type: string
           description: |
-            Code of the delivery service type will be carried out. It can take the following values :
+            Se realizará el código del tipo de servicio de entrega. Puede tomar los siguientes valores:
 
-            | Service (All the countries) | Description |
+            | Servicio (Todos los países) | Descripción |
             | ------------- | ------------ |
-            | NEXT DAY | The order will be shipped the next day. |
-            | SAME DAY | The order will be sent on the same day if it is received before the cut-off time, otherwise it will be sent the next day (The cut-off time can be requested from the commercial area) |
+            | NEXT DAY | El pedido se enviará al día siguiente. |
+            | SAME DAY | El pedido se enviará el mismo día si se 
+            recibe antes de la hora límite, en caso contrario se 
+            enviará al día siguiente (La hora límite se puede 
+            solicitar al área comercial) |
           example: "SAME DAY"
         cod:
           type: number
