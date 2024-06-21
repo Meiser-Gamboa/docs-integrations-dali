@@ -33,6 +33,8 @@ paths:
       responses:
         "200":
           "$ref": "#/components/responses/responseCreate200"
+        "500":
+          "$ref": "#/components/responses/responseCreate500"
   "/:tracking":
     get:
       description: This API allows us to see all the states the delivery passed group by services.The services group reference the number of attempts made to deliver the delivery.
@@ -264,7 +266,7 @@ components:
                   #  example: "B2B"
                   change:
                     type: bool
-                    description: Indicador de lógica inversa, nos permite realizar en caso de ser necesario la recogida de pedidos devueltos por el cliente.
+                    description: Reverse logic indicator, which allows us to collect orders returned by the customer if necessary.
                     example: false
                   product:
                     "$ref": "#/components/schemas/product"
@@ -275,7 +277,21 @@ components:
                   status:
                     type: string
                     description: Delivery status.
-                    example: Created
+                    example: QUEUE
+                  created:
+                    type: string
+                    description: Creation date in RFC-3339 (ISO-8601) format in UTC.
+                    example: "2024-06-20T18:21:21Z"
+                  removed:
+                    type: bool
+                    description: Indicator that informs whether the order is in cancelled, deleted and/or voided status.
+                    example: false
+                  trackingUrl:
+                    type: string
+                    description: Order tracking link.
+                    example: "https://tracking.ng.paquery.com/package/MzU1MTM5Ng"
+    "responseCreate500":
+      description: The error will be displayed in plain text indicating the reason..
   parameters:
     queryEnterpriseKey:
       name: key
