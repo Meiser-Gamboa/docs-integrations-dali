@@ -12,7 +12,7 @@ const StoplightAPI = ({ apiDescriptionUrl, basePath }: stopLightProps) => {
       <API
         apiDescriptionUrl={apiDescriptionUrl}
         basePath={basePath}
-        router="history"
+        router="memory"
         layout="sidebar"
       />
     </div>
