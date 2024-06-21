@@ -217,23 +217,34 @@ components:
         type:
           type: string
           description: |
-            Se realizará el código del tipo de servicio de entrega. Puede tomar los siguientes valores:
+            Código del tipo de servicio de entrega. 
+            
+            Puede tomar los siguientes valores:
 
             | Servicio (Todos los países) | Descripción |
             | ------------- | ------------ |
             | NEXT DAY | El pedido se enviará al día siguiente. |
-            | SAME DAY | El pedido se enviará el mismo día si se 
-            recibe antes de la hora límite, en caso contrario se 
-            enviará al día siguiente (La hora límite se puede 
-            solicitar al área comercial) |
+            | SAME DAY | El pedido se enviará el mismo día. |
+
+            *Nota:* Paara el servicio 'NEXT DAY' se tiene una hora limite
+            en el cual se realizara la entrega si se recibe antes de la hora 
+            límite, en caso contrario se enviará al día siguiente (La hora 
+            límite se puede solicitar al área comercial).
           example: "SAME DAY"
         cod:
           type: number
-          description: Payment is made at the destination address (cash on delivery), the amount to be charged to the final recipient is indicated in the shipmentPrice field.
+          description: |
+            Para el valor 0 (false) es envio se indica como pagado, para el 
+            valor 1 (true) el pago se realiza en la dirección de destino 
+            (contra reembolso), el importe a cobrar al destinatario final es 
+            enviado en el campo value dentro de product.
           example: 0
         change:
           type: bool
-          description: Indicador de lógica inversa, nos permite realizar en caso de ser necesario la recogida de pedidos devueltos por el cliente.
+          description: |
+            Indicador de lógica inversa, nos permite realizar en caso de 
+            ser necesario el recojo de ordenes para devolución desde el cliente
+            final.
           example: false
         product:
           "$ref": "#/components/schemas/product"
