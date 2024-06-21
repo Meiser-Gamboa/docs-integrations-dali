@@ -9,6 +9,23 @@ info:
     Estos servicios están registrados en el dominio propiedad de chazki y se detallan 
     en el apartado siguiente. Descubre más sobre [Chazki aquí](https://chazki.com/#/). 
     Consulte también nuestros [Términos y condiciones](https://www.chazki.com/politica-de-privacidad).
+
+    ## Estados de envio:
+
+    Los posibles valores para shipment_status y Package_status son:
+
+      - **DELIVERED:** Entregado
+      - **PARTIALLY_DELIVERED:** Entrega parcial, no aplica en este caso porque 1 paquete = 1 envío
+      - **CANCELLED:** Cancelado
+      - **CROSSDOCKED:** Arribado al depósito
+      - **PARTIALLY_CROSSDOCKED:** Arribo parcial, no aplica en este caso porque 1 paquete = 1 envío
+      - **DELIVERY_ASSIGNED:** Asignado a una ruta de entrega
+      - **TO_DELIVERY / ONTHEWAY:** En camino a ser entregado (es el próximo de la lista)
+      - **FAILED_DELIVERY / DELIVERY_FAILED:** No se ha podido entregar, posible reintento de entrega
+    
+    según políticas del operador logístico.
+      
+      - **RETURNED:** Devuelto al seller.
   termsOfService: https://chazki.com/tyc.html
   contact:
     email: apiteam@swagger.io
@@ -71,7 +88,7 @@ paths:
         - "$ref": '#/components/parameters/queryEnterpriseKey'
       responses:
         "200":
-          "$ref": "#/components/responses/responseCreate200"
+          "$ref": "#/components/responses/responsePod200"
         400:
           "$ref": "#/components/responses/responsePod400"
         404:
@@ -375,7 +392,7 @@ components:
           description: Localidad o distrito donde se genera el evento.
           example: "Buenos Aires"
     "responseCreate200":
-      description: Successfully response object.
+      description: Respuesta satisfactoria.
       content:
         application/json:
           schema:
@@ -452,7 +469,7 @@ components:
     "responseCreate500":
       description: El error se mostrará en texto simple indicando el motivo.
     "responseStatus200":
-      description: Successfully response object.
+      description: Respuesta satisfactoria.
       content:
         application/json:
           schema:
@@ -516,7 +533,7 @@ components:
         Se obtiene un archivo pdf con las etiquetas 
         que se visualiza en el mismo navegador.
     "responsePod400":
-      description: Successfully response object.
+      description: Respuesta con errores.
       content:
         application/json:
           schema:
@@ -527,7 +544,7 @@ components:
                 description: Describe el error encontrado.
                 example: "error getting pod: Package 6384179 must be delivered"
     "responsePod404":
-      description: Successfully response object.
+      description: Respuesta con errores.
       content:
         application/json:
           schema:
@@ -541,6 +558,18 @@ components:
                 type: number
                 description: Codigo de respuesta.
                 example: 404
+    "responsePod200":
+      description: Se obtiene los detalles de entrega en base 64.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: string
+                description: |
+                  PDF con los detalles de entrega en base 64.
+                example: "data:application/pdf;base64,JVBERi0xLjcKJeLjz9.......MTQKc3RhcnR4cmVmCjMxNzMKJSVFT0YK"
   parameters:
     queryEnterpriseKey:
       name: key
