@@ -234,6 +234,37 @@ components:
         shipment:
           "$ref": "#/components/schemas/shipment"
   responses:
+    addressResponse:
+      type: object
+      properties:
+        address:
+          type: string
+          description: Address of the client or address of collection of the products.
+          example: "Calle F. Valle Riestra 576, San Isidro, Lima 15074, Perú"
+        name:
+          type: string
+          description: Contact Names for the recollection.
+          example: XXXXXXXXXXXXXXXXXXXXXXXXX
+        phone:
+          type: string
+          description: Contact phone number for the recollection.
+          example: XXXXX-xxxxx
+        email:
+          type: string
+          description: Email for recollection notification.
+          example: mail@mail.com
+        reference:
+          type: string
+          description: References of customer addresses or collection of products.
+          example: "-"
+        notes:
+          type: string
+          description: Additional data that facilitate the collection of products.
+          example: "-"
+        schedule:
+          type: string
+          description: time slot data for collection.
+          example: "08 a 18"
     "responseCreate200":
       description: Successfully response object.
       content:
@@ -269,11 +300,18 @@ components:
                     description: Reverse logic indicator, which allows us to collect orders returned by the customer if necessary.
                     example: false
                   product:
-                    "$ref": "#/components/schemas/product"
+                    type: object
+                    properties:
+                      size:
+                        type: string
+                        description: total number of packages (when sending 0, a single label is created for the shipment, otherwise a label is generated for each package).
+                        example: "Chico"
+                      dimensions:
+                        "$ref": "#/components/schemas/dimensions"
                   origin:
-                    "$ref": "#/components/schemas/origin"
+                    "$ref": "#/components/responses/addressResponse"
                   destination:
-                    "$ref": "#/components/schemas/origin"
+                    "$ref": "#/components/responses/addressResponse"
                   status:
                     type: string
                     description: Delivery status.
