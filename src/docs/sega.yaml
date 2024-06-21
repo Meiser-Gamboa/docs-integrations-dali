@@ -36,6 +36,10 @@ paths:
       responses:
         "200":
           "$ref": "#/components/responses/responseCreate200"
+        400:
+          "$ref": "#/components/responses/responsePod400"
+        404:
+          "$ref": "#/components/responses/responsePod404"
         "500":
           "$ref": "#/components/responses/responseCreate500"
   "/tracker/{tracking}":
@@ -51,6 +55,12 @@ paths:
       responses:
         "200":
           "$ref": "#/components/responses/responseStatus200"
+        400:
+          "$ref": "#/components/responses/responsePod400"
+        404:
+          "$ref": "#/components/responses/responsePod404"
+        "500":
+          "$ref": "#/components/responses/responseCreate500"
   "/pod/{tracking}":
     parameters: 
       - "$ref": '#/components/parameters/tracking'
@@ -62,6 +72,12 @@ paths:
       responses:
         "200":
           "$ref": "#/components/responses/responseCreate200"
+        400:
+          "$ref": "#/components/responses/responsePod400"
+        404:
+          "$ref": "#/components/responses/responsePod404"
+        "500":
+          "$ref": "#/components/responses/responseCreate500"
   "/tag/{tracking}":
     parameters: 
       - "$ref": '#/components/parameters/tracking'
@@ -74,6 +90,12 @@ paths:
       responses:
         "200":
           "$ref": "#/components/responses/responseLabel200"
+        400:
+          "$ref": "#/components/responses/responsePod400"
+        404:
+          "$ref": "#/components/responses/responsePod404"
+        "500":
+          "$ref": "#/components/responses/responseCreate500"
   "/{tracking}":
     parameters: 
       - "$ref": '#/components/parameters/tracking'
@@ -85,6 +107,12 @@ paths:
       responses:
         "200":
           "$ref": "#/components/responses/responseCreate200"
+        400:
+          "$ref": "#/components/responses/responsePod400"
+        404:
+          "$ref": "#/components/responses/responsePod404"
+        "500":
+          "$ref": "#/components/responses/responseCreate500"
 
 components:
   schemas:
@@ -487,6 +515,32 @@ components:
       description: |
         Se obtiene un archivo pdf con las etiquetas 
         que se visualiza en el mismo navegador.
+    "responsePod400":
+      description: Successfully response object.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                description: Describe el error encontrado.
+                example: "error getting pod: Package 6384179 must be delivered"
+    "responsePod404":
+      description: Successfully response object.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error_message:
+                type: string
+                description: Describe el error encontrado.
+                example: "Shipment not found"
+              status_code:
+                type: number
+                description: Codigo de respuesta.
+                example: 404
   parameters:
     queryEnterpriseKey:
       name: key
