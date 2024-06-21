@@ -3,9 +3,12 @@ openapi: 3.0.0
 info:
   title: SEGA - DALI
   description: |
-    In order to place orders for Chazki's services, endpoints were enabled to record the delivery and check the orders status. These services are registered in the domain owned by chazki and are detailed in the section below.
-    Find out more about [Chazki here](https://chazki.com/#/).
-    See also our
+    Para realizar pedidos de los servicios de Chazki, se habilitaron puntos finales 
+    para registrar la entrega y verificar el estado de los pedidos. 
+    
+    Estos servicios están registrados en el dominio propiedad de chazki y se detallan 
+    en el apartado siguiente. Descubre más sobre [Chazki aquí](https://chazki.com/#/). 
+    Consulte también nuestros [Términos y condiciones](https://www.chazki.com/politica-de-privacidad).
   termsOfService: https://chazki.com/tyc.html
   contact:
     email: apiteam@swagger.io
@@ -20,8 +23,8 @@ servers:
 paths:
   "/create":
     post:
-      description: This endpoint allows to register a delivery.
-      operationId: Create Order 
+      description: Este punto final permite registrar un envio.
+      operationId: Crear Orden
       parameters:
         - "$ref": '#/components/parameters/queryEnterpriseKey'
       requestBody:
@@ -76,14 +79,15 @@ components:
   schemas:
     geoData:
       type: object
+      description: Estructura de las coordenadas de la dirección de recojo o entrega.
       properties:
         lat:
           type: number
-          description: Coordinates of picking address (latitude).
+          description: Coordenadas de la dirección de recojo o entrega (latitud).
           example: -12.0052
         lng:
           type: number
-          description: Coordinates of picking address (longitude).
+          description: Coordenadas de la dirección de recojo o entrega (longitude).
           example: -90.0034
     address:
       type: object
