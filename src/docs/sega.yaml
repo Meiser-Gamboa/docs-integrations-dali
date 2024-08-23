@@ -32,8 +32,7 @@ info:
 
     A continuación, se detalla el significado de cada uno de los campos.
 
-      - **Shipment_id:** corresponde al número de envío, en caso de que el envío conste de un solo paquete este
-      número coincide con el tracking_number.
+      - **Shipment_id:** corresponde al número de envío, en caso de que el envío conste de un solo paquete este número coincide con el tracking_number.
       - **Shipment_status:** el estado del envío.
       - **Tracking_number:** número de seguimiento asociado al paquete.
       - **Package_status:** el estado del paquete.
