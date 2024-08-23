@@ -16,7 +16,7 @@ info:
     envío.
     El formato que se enviará es el siguiente:
 
-    `` JSON
+    ``` JSON
     {
       "shipment_id": "XYZ1231233",
       "shipment_status": "CROSSDOCKED",
@@ -28,7 +28,7 @@ info:
         }
       ]
     }
-    ``
+    ```
 
     A continuación, se detalla el significado de cada uno de los campos.
 
