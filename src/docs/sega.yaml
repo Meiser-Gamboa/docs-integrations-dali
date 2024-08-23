@@ -10,6 +10,35 @@ info:
     en el apartado siguiente. Descubre más sobre [Chazki aquí](https://chazki.com/#/). 
     Consulte también nuestros [Términos y condiciones](https://www.chazki.com/politica-de-privacidad).
 
+    ## Webhooks (Notificaciones de estado)
+
+    La actualización de estados se produce cada vez que se genera un evento de cambio en el flujo de un
+    envío.
+    El formato que se enviará es el siguiente:
+
+    `` JSON
+    {
+      "shipment_id": "XYZ1231233",
+      "shipment_status": "CROSSDOCKED",
+      "statuses": [
+        {
+          "tracking_number": "BMN231333123",
+          "package_status": "CROSSDOCKED",
+          "timestamp": "2023-08-09T17:16:30Z"
+        }
+      ]
+    }
+    ``
+
+    A continuación, se detalla el significado de cada uno de los campos.
+
+      - **Shipment_id:** corresponde al número de envío, en caso de que el envío conste de un solo paquete este
+      número coincide con el tracking_number.
+      - **Shipment_status:** el estado del envío.
+      - **Tracking_number:** número de seguimiento asociado al paquete.
+      - **Package_status:** el estado del paquete.
+      - **Timestamp:** Hora en que se produjo el evento, cambio de estado.
+
     ## Estados de envio:
 
     Los posibles valores para shipment_status y Package_status son:
@@ -279,8 +308,9 @@ components:
 
             | Servicio (Todos los países) | Descripción |
             | ------------- | ------------ |
-            | NEXT DAY | El pedido se enviará al día siguiente. |
-            | SAME DAY | El pedido se enviará el mismo día. |
+            | NEXTDAY | El pedido se enviará al día siguiente. |
+            | SAMEDAY | El pedido se enviará el mismo día. |
+            | ONEWEEK | El pedido se enviará a la semana siguiente. |
 
             **Nota:** Paara el servicio 'NEXT DAY' se tiene una hora limite
             en el cual se realizara la entrega si se recibe antes de la hora 
