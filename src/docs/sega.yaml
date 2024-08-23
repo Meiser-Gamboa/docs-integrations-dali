@@ -130,6 +130,24 @@ paths:
     get:
       description: |
         Con este endpoint obtiene el listado de etiqueta del envío.
+
+        ## Modelo de etiqueta
+
+        ![Imagen del paso 2](./public/images/tag-model01.png)
+
+        A continuación, se detalla cada punto de la etiqueta:
+
+          1. Codigo interno en nuestro sistema.
+          2. Codigo de barras del punto 1.
+          3. Logo de la tienda custom, por default se coloca nuestro logo.
+          4. Datos del destino de entrega (Nombre de cliente, dirección y referencia)
+          5. Codigo Qr asociado al envio.
+          6. Zona interna y codigo postal asociado en el sistema.
+          7. Codigo externo (trackcode) enviado en la integración al crear la orden.
+          8. Descripción de la Zona asociada al envio.
+          9. Descripción del tipo de envio en la integración al crear la orden.
+          10. Nombre del market place que crea la orden.
+
       operationId: Etiqueta (tag)
       parameters:
         - "$ref": '#/components/parameters/queryEnterpriseKey'
