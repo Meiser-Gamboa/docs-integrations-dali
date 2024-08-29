@@ -228,7 +228,6 @@ components:
           "$ref": "#/components/schemas/geoData"
       required:
         - line
-        - latLng
     origin:
       type: object
       properties:
@@ -354,7 +353,6 @@ components:
         destination:
           "$ref": "#/components/schemas/origin"
       required:
-        - tracking
         - type
         - change
         - product
