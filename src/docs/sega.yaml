@@ -147,6 +147,7 @@ paths:
       operationId: Etiqueta (tag)
       parameters:
         - "$ref": '#/components/parameters/queryEnterpriseKey'
+        - "$ref": '#/components/parameters/queryFormat'
       responses:
         "200":
           "$ref": "#/components/responses/responseLabel200"
@@ -687,6 +688,19 @@ components:
         obtiene una vez generada la empresa dentro de 
         Chazki por el área comercial.
       required: true
+      style: form
+      explode: false
+      schema:
+        type: string
+    queryFormat:
+      name: format
+      in: query
+      description: |
+        Permite seleccionar el formato del archivo de la 
+        etiqueta para descargar, sino se envia por 
+        default se obtiene en pdf.
+
+        **Soporta**: ZPL.
       style: form
       explode: false
       schema:
