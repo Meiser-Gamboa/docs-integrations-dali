@@ -107,7 +107,7 @@ paths:
     parameters: 
       - "$ref": '#/components/parameters/tracking'
     get:
-      description: This API allows us to see all the states the delivery passed group by services.The services group reference the number of attempts made to deliver the delivery.
+      description: Este endpoint nos permite obtener los documento y/o imagenes que sustentan en la entrega o falla de la entrega.
       operationId: Pod
       parameters:
         - "$ref": '#/components/parameters/queryEnterpriseKey'
@@ -161,7 +161,7 @@ paths:
     parameters: 
       - "$ref": '#/components/parameters/tracking'
     get:
-      description: This API allows us to see all the states the delivery passed group by services.The services group reference the number of attempts made to deliver the delivery.
+      description: Esta API nos permite ver los estados por los que pasó la entrega, agrupados por servicios. Los grupos de servicios hacen referencia al número de intentos realizados para realizar la entrega.
       operationId: Tracking Orden
       parameters:
         - "$ref": '#/components/parameters/queryEnterpriseKey'
