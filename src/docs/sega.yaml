@@ -84,25 +84,25 @@ paths:
           "$ref": "#/components/responses/responsePod404"
         "500":
           "$ref": "#/components/responses/responseCreate500"
-  "/tracker/{tracking}":
-    parameters: 
-      - "$ref": '#/components/parameters/tracking'
-    get:
-      description: |
-        En este endpoint permite realizar el seguimiento del envio, 
-        también el historial de cambios de estado.
-      operationId: Tracking Orden
-      parameters: 
-        - "$ref": '#/components/parameters/queryEnterpriseKey'
-      responses:
-        "200":
-          "$ref": "#/components/responses/responseStatus200"
-        400:
-          "$ref": "#/components/responses/responsePod400"
-        404:
-          "$ref": "#/components/responses/responsePod404"
-        "500":
-          "$ref": "#/components/responses/responseCreate500"
+  ##"/tracker/{tracking}":
+  ##  parameters: 
+  ##    - "$ref": '#/components/parameters/tracking'
+  ##  get:
+  ##    description: |
+  ##      En este endpoint permite realizar el seguimiento del envio, 
+  ##      también el historial de cambios de estado.
+  ##    operationId: Tracking Orden
+  ##    parameters: 
+  ##      - "$ref": '#/components/parameters/queryEnterpriseKey'
+  ##    responses:
+  ##      "200":
+  ##        "$ref": "#/components/responses/responseStatus200"
+  ##      400:
+  ##        "$ref": "#/components/responses/responsePod400"
+  ##      404:
+  ##        "$ref": "#/components/responses/responsePod404"
+  ##      "500":
+  ##        "$ref": "#/components/responses/responseCreate500"
   "/pod/{tracking}":
     parameters: 
       - "$ref": '#/components/parameters/tracking'
@@ -162,7 +162,7 @@ paths:
       - "$ref": '#/components/parameters/tracking'
     get:
       description: This API allows us to see all the states the delivery passed group by services.The services group reference the number of attempts made to deliver the delivery.
-      operationId: Detalles de Orden
+      operationId: Tracking Orden
       parameters:
         - "$ref": '#/components/parameters/queryEnterpriseKey'
       responses:
@@ -427,14 +427,26 @@ components:
           type: string
           description: Fecha de evento en formato RFC-3339 (ISO-8601) en UTC.
           example: "2024-06-20T19:05:08Z"
-        description:
+        statusCode:
           type: string
-          description: Detalle del evento generado.
+          description: Codigo del evento (estado) generado.
+          example: "CROSSDOCKED"
+        status:
+          type: string
+          description: Detalle del evento generado, el valor de este campo es variable a la integración.
           example: "En Chazki"
-        location:
+        agent:
           type: string
-          description: Localidad o distrito donde se genera el evento.
-          example: "Buenos Aires"
+          description: Campo desactualizado.
+          example: "N/A"
+        controlled:
+          type: boolean
+          description: Describe estados con el driver.
+          example: true
+        reason: 
+          type: string
+          description: motivo o rason de rechazo o incidente indicado por el driver.
+          example: "Zona no accesible"
     "responseCreate200":
       description: Respuesta satisfactoria.
       content:
