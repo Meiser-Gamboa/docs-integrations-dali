@@ -239,6 +239,7 @@ components:
 
             **Longitud Max:** 50
           maxLength: 50
+          minLength: 1
           example: XXXXXXXXXXXXXXXXXXXXXXXXX
         phone:
           type: string
