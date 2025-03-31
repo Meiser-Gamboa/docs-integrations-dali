@@ -43,10 +43,8 @@ info:
     Los posibles valores para shipment_status y Package_status son:
 
       - **DELIVERED:** Entregado
-      - **PARTIALLY_DELIVERED:** Entrega parcial, no aplica en este caso porque 1 paquete = 1 envío
       - **CANCELLED:** Cancelado
       - **CROSSDOCKED:** Arribado al depósito
-      - **PARTIALLY_CROSSDOCKED:** Arribo parcial, no aplica en este caso porque 1 paquete = 1 envío
       - **DELIVERY_ASSIGNED:** Asignado a una ruta de entrega
       - **TO_DELIVERY / ONTHEWAY:** En camino a ser entregado (es el próximo de la lista)
       - **FAILED_DELIVERY / DELIVERY_FAILED:** No se ha podido entregar, posible reintento de entrega según políticas del operador logístico.
@@ -54,6 +52,8 @@ info:
       - **DSL_PACKAGE:** El envío fue marcado como dañado, perdido o robado.
       - **RETURN_IN_PROGRESS:** Se encuentra en proceso de devolución.
       - **PICKED_UP:** El envio fue recogido.
+  ##- **PARTIALLY_DELIVERED:** Entrega parcial, no aplica en este caso porque 1 paquete = 1 envío
+  ##- **PARTIALLY_CROSSDOCKED:** Arribo parcial, no aplica en este caso porque 1 paquete = 1 envío
   termsOfService: https://chazki.com/tyc.html
   contact:
     email: apiteam@swagger.io
