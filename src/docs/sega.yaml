@@ -150,7 +150,7 @@ paths:
           12. Descripción de la Zona asociada al envio.
           13. Zona interna de nuestro sistema.
 
-        Al utilizar el query param 'format' con el valor zpl este permite descargar 
+        Al utilizar el query param 'format' con el valor 'zpl' este permite descargar 
         el archivo con el codigo para la impresora y posee el siguiente modelo:
         
         ![Imagen del paso 2](https://raw.githubusercontent.com/Meiser-Gamboa/docs-integrations-dali/main/public/images/tag-model03.png)
@@ -168,6 +168,8 @@ paths:
           11. Descripción del tipo de envio en la integración al crear la orden.
           12. Nombre del market place que crea la orden.
           13. Codigo externo (trackcode) enviado en la integración al crear la orden.
+
+        Para descargar el pdf en formato base64 se debe utilizar el query param 'format' con el valor 'pdf_base64'.
 
       operationId: Etiqueta (tag)
       parameters:
@@ -747,10 +749,13 @@ components:
       in: query
       description: |
         Permite seleccionar el formato del archivo de la 
-        etiqueta para descargar, sino se envia por 
-        default se obtiene en pdf.
+        etiqueta para descargar:
 
-        **Soporta**: ZPL.
+        - **zpl:** Etiqueta como texto en formato zpl (Zebra).
+        - **pdf:** Etiqueta en formato PDF binario.
+        - **pdf_base64:** Etiqueta en formato PDF codificado en base64 dentro de un Json.s
+
+        **Soporta**: ZPL, pdf_base64.
       style: form
       explode: false
       schema:
