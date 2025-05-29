@@ -9,51 +9,6 @@ info:
     Estos servicios están registrados en el dominio propiedad de chazki y se detallan 
     en el apartado siguiente. Descubre más sobre [Chazki aquí](https://chazki.com/#/). 
     Consulte también nuestros [Términos y condiciones](https://www.chazki.com/politica-de-privacidad).
-
-    ## Webhooks (Notificaciones de estado)
-
-    La actualización de estados se produce cada vez que se genera un evento de cambio en el flujo de un
-    envío.
-    El formato que se enviará es el siguiente:
-
-    ``` JSON
-    {
-      "shipment_id": "XYZ1231233",
-      "shipment_status": "CROSSDOCKED",
-      "statuses": [
-        {
-          "tracking_number": "BMN231333123",
-          "package_status": "CROSSDOCKED",
-          "timestamp": "2023-08-09T17:16:30Z"
-        }
-      ]
-    }
-    ```
-
-    A continuación, se detalla el significado de cada uno de los campos.
-
-      - **Shipment_id:** corresponde al número de envío, en caso de que el envío conste de un solo paquete este número coincide con el tracking_number.
-      - **Shipment_status:** el estado del envío.
-      - **Tracking_number:** número de seguimiento asociado al paquete.
-      - **Package_status:** el estado del paquete.
-      - **Timestamp:** Hora en que se produjo el evento, cambio de estado.
-
-    ## Estados de envio:
-
-    Los posibles valores para shipment_status y Package_status son:
-
-      - **DELIVERED:** Entregado
-      - **CANCELLED:** Cancelado
-      - **CROSSDOCKED:** Arribado al depósito
-      - **DELIVERY_ASSIGNED:** Asignado a una ruta de entrega
-      - **TO_DELIVERY / ONTHEWAY:** En camino a ser entregado (es el próximo de la lista)
-      - **FAILED_DELIVERY / DELIVERY_FAILED:** No se ha podido entregar, posible reintento de entrega según políticas del operador logístico.
-      - **RETURNED:** Devuelto al seller.
-      - **DSL_PACKAGE:** El envío fue marcado como dañado, perdido o robado.
-      - **RETURN_IN_PROGRESS:** Se encuentra en proceso de devolución.
-      - **PICKED_UP:** El envio fue recogido.
-  ##- **PARTIALLY_DELIVERED:** Entrega parcial, no aplica en este caso porque 1 paquete = 1 envío
-  ##- **PARTIALLY_CROSSDOCKED:** Arribo parcial, no aplica en este caso porque 1 paquete = 1 envío
   termsOfService: https://chazki.com/tyc.html
   contact:
     email: apiteam@swagger.io
@@ -207,7 +162,7 @@ webhooks:
     post:
       summary: Notificaciones de estado
       description: |
-        La actualización de estados se produce cada vez que se genera un evento de cambio en el flujo de un envío. El formato que se enviará es el siguiente:
+        La actualización de estados se produce cada vez que se genera un evento de cambio en el flujo de un envío. 
 
         ## Estados de envio:
 
