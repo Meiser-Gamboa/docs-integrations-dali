@@ -202,6 +202,69 @@ paths:
         "500":
           "$ref": "#/components/responses/responseCreate500"
 
+webhooks:
+  updateStatus:
+    post:
+      summary: Notificaciones de estado
+      description: |
+        La actualización de estados se produce cada vez que se genera un evento de cambio en el flujo de un envío. El formato que se enviará es el siguiente:
+
+        ## Estados de envio:
+
+        Los posibles valores para shipment_status y Package_status son:
+
+          - **DELIVERED:** Entregado
+          - **CANCELLED:** Cancelado
+          - **CROSSDOCKED:** Arribado al depósito
+          - **DELIVERY_ASSIGNED:** Asignado a una ruta de entrega
+          - **TO_DELIVERY / ONTHEWAY:** En camino a ser entregado (es el próximo de la lista)
+          - **FAILED_DELIVERY / DELIVERY_FAILED:** No se ha podido entregar, posible reintento de entrega según políticas del operador logístico.
+          - **RETURNED:** Devuelto al seller.
+          - **DSL_PACKAGE:** El envío fue marcado como dañado, perdido o robado.
+          - **RETURN_IN_PROGRESS:** Se encuentra en proceso de devolución.
+          - **PICKED_UP:** El envio fue recogido.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                shipment_id:
+                  type: string
+                  description: Corresponde al número de envío, en caso de que el envío conste de un solo paquete este número coincide con el tracking_number.
+                  example: XYZ1231233
+                shipment_status:
+                  type: string
+                  description: El estado del envío.
+                  example: CROSSDOCKED
+                statuses:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      tracking_number:
+                        type: string
+                        description: Número de seguimiento asociado al paquete.
+                        example: BMN231333123
+                      package_status:
+                        type: string
+                        description: el estado del paquete.
+                        example: CROSSDOCKED
+                      timestamp:
+                        type: string
+                        description: Hora en que se produjo el evento, cambio de estado.
+                        format: date-time
+                        example: 2023-08-09T17:16:30Z
+                    required:
+                      - tracking_number
+                      - package_status
+                      - timestamp
+              required:
+                - shipment_id
+                - shipment_status
+                - statuses
+
 components:
   schemas:
     geoData:
