@@ -550,11 +550,14 @@ components:
                     type: object
                     properties:
                       size:
-                        type: string
-                        description: Tamaño promedio de los paquetes.
-                        example: "Chico"
-                      dimensions:
-                        "$ref": "#/components/schemas/dimensions"
+                        type: object
+                        properties:
+                          code:
+                            type: string
+                            description: Tamaño promedio de los paquetes.
+                            example: "Chico"
+                          dimensions:
+                            "$ref": "#/components/schemas/dimensions"
                   origin:
                     "$ref": "#/components/responses/addressResponse"
                   destination:
