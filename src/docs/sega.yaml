@@ -344,25 +344,43 @@ components:
           type: string
           description: Tamaño promedio de los paquetes.
           example: "Chico"
-        dimensions:
-          "$ref": "#/components/schemas/dimensions"
+        physicalAttributes:
+          "$ref": "#/components/schemas/physicalAttributes"
       required:
         - description
-    dimensions:
+    physicalAttributes:
       type: object
       properties:
-        height:
-          type: number
-          description: Altura promedio de los paquetes.
-          example: 0
-        width:
-          type: number
-          description: Ancho promedio de los paquetes.
-          example: 0
-        length:
-          type: number
-          description: Largo promedio de los paquetes.
-          example: 0
+        dimensions:
+          type: object
+          properties:
+            height:
+              type: number
+              description: Altura promedio de los paquetes.
+              example: 0
+            width:
+              type: number
+              description: Ancho promedio de los paquetes.
+              example: 0
+            length:
+              type: number
+              description: Largo promedio de los paquetes.
+              example: 0
+            unit:
+              type: string
+              description: Unidad de los campos para dimensiones.
+              example: "cm"
+        weight:
+          type: object
+          properties:
+            value:
+              type: number
+              description: Valor del peso.
+              example: 0
+            unit:
+              type: string
+              description: Unidad del peso.
+              example: "gr"
     shipment:
       type: object
       properties:
