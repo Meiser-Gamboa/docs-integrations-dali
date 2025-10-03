@@ -381,6 +381,21 @@ components:
               type: string
               description: Unidad del peso.
               example: "gr"
+    dimensions:
+      type: object
+      properties:
+        height:
+          type: number
+          description: Altura promedio de los paquetes.
+          example: 0
+        width:
+          type: number
+          description: Ancho promedio de los paquetes.
+          example: 0
+        length:
+          type: number
+          description: Largo promedio de los paquetes.
+          example: 0
     shipment:
       type: object
       properties:
