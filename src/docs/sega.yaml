@@ -166,7 +166,7 @@ webhooks:
 
         ## Estados de envio:
 
-        Los posibles valores para shipment_status y Package_status son:
+        Los posibles valores para shipment_status son:
 
           - **DELIVERED:** Entregado
           - **CANCELLED:** Cancelado
@@ -406,22 +406,25 @@ components:
         type:
           type: string
           description: |
-            Código del tipo de servicio de entrega. 
-            
-            Puede tomar los siguientes valores:
+            Código que identifica el tipo de servicio de entrega disponible.
 
-            | Servicio (Todos los países) | Descripción |
-            | ------------- | ------------ |
-            | NEXTDAY | El pedido se enviará al día siguiente. |
-            | SAMEDAY | El pedido se enviará el mismo día. |
-            | ONEWEEK | El pedido se enviará a la semana siguiente. |
-            | TWOWEEKS | El pedido se enviará en las 2 semanas siguientes. |
-            | PICKUP_STORE | El pedido se colocara en un punto de recojo (retiro en tienda). |
+            Puede tomar uno de los siguientes valores:
 
-            **Nota:** Paara el servicio 'NEXT DAY' se tiene una hora limite
-            en el cual se realizara la entrega si se recibe antes de la hora 
-            límite, en caso contrario se enviará al día siguiente (La hora 
-            límite se puede solicitar al área comercial).
+            | Código de servicio | Descripción |
+            | ------------------- | ----------- |
+            | NEXTDAY | El pedido se entregará al día siguiente. |
+            | SAMEDAY | El pedido se entregará el mismo día. |
+            | SAMEDAY_EXPRESS | El pedido se entregará el mismo día, con un tiempo estimado de entrega de 2 horas. |
+            | 48HOURS | El pedido se entregará dentro de las 48 horas siguientes. |
+            | ONEWEEK | El pedido se entregará durante la semana siguiente. |
+            | TWOWEEKS | El pedido se entregará dentro de las 2 semanas siguientes. |
+            | PICKUP_STORE | El pedido estará disponible para retiro en tienda o punto de recojo. |
+
+            **Nota:**  
+            Para el servicio `NEXTDAY`, existe una **hora límite** para la recepción del pedido.  
+            Si el pedido se recibe antes de dicha hora, la entrega se realizará al día siguiente.  
+            En caso contrario, se programará para el siguiente día hábil.  
+            La hora límite específica puede ser consultada con el área comercial.
           example: "SAMEDAY"
         cod:
           type: number
