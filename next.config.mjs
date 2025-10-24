@@ -7,6 +7,11 @@ const nextConfig = {
             destination: '/sega/v3',
             permanent: false, 
         },
+          {
+            source: '/sega',
+            destination: '/sega/v2',
+            permanent: false, 
+        },
     ];
   },
 };
