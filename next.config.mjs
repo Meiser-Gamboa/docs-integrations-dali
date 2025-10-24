@@ -4,7 +4,7 @@ const nextConfig = {
         return [
           {
             source: '/',
-            destination: '/sega',
+            destination: '/sega/v3',
             permanent: false, 
         },
     ];
