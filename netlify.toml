@@ -1,0 +1,51 @@
+# netlify.toml — Next.js on Netlify (Jammy + Node 20)
+
+[build]
+  # Si usas pnpm/yarn, Netlify lo detecta por el lockfile.
+  command = "npm run build"
+  # El plugin oficial de Next ajusta internamente publish y functions.
+  # De todos modos, define publish para evitar warnings en UI.
+  publish = ".next"
+
+[build.environment]
+  # ← fuerza la imagen Jammy (Ubuntu 22.04)
+  NETLIFY_BUILD_IMAGE = "jammy"
+
+  # Versiones de runtime
+  NODE_VERSION = "20"
+
+  # (Opcional) Desactiva la telemetría de Next en builds
+  NEXT_TELEMETRY_DISABLED = "1"
+
+  # (Opcional) si usas imágenes remotas en Next/Image:
+  # NEXT_IMAGE_ALLOWED_DOMAINS = "example.com,cdn.tuapp.com"
+
+  # (Opcional) si usas Stoplight Elements por CDN y necesitas CSP, configúralo en headers abajo
+
+# Plugin oficial de Next.js (imprescindible)
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Headers de caché para assets estáticos y OpenAPI en /public
+# Ajusta rutas si tu contenido vive en otra carpeta o subruta.
+# ─────────────────────────────────────────────────────────────────────────────
+
+# JS/CSS/Media generados por Next (hashados)
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Imágenes optimizadas por Next (si las sirves desde el sitio)
+[[headers]]
+  for = "/_next/image*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# OpenAPI specs en /public/openapi/**  (sirve YAML/JSON con buen cache)
+[[headers]]
+  for = "/docs/*"
+  [headers.values]
+    # Ajusta si quieres menor TTL mientras versionas a menudo
+    Cache-Control = "public, max-age=3600"

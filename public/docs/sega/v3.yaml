@@ -1,0 +1,825 @@
+---
+openapi: 3.0.0
+info:
+  title: SEGA - DALI
+  description: |
+    Para realizar pedidos de los servicios de Chazki, se habilitaron puntos finales 
+    para registrar la entrega y verificar el estado de los pedidos. 
+    
+    Estos servicios están registrados en el dominio propiedad de chazki y se detallan 
+    en el apartado siguiente. Descubre más sobre [Chazki aquí](https://chazki.com/#/). 
+    Consulte también nuestros [Términos y condiciones](https://www.chazki.com/politica-de-privacidad).
+  termsOfService: https://chazki.com/tyc.html
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 3.0.0
+servers:
+  - url: https://integrations.ng.paquery.com/sega/api/v2/shipment
+    description: Sega Production
+
+paths:
+  "/create":
+    post:
+      description: Este endpoint permite registrar un envio.
+      operationId: Crear Orden
+      parameters:
+        - "$ref": '#/components/parameters/queryEnterpriseKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/createShipment"
+      responses:
+        "200":
+          "$ref": "#/components/responses/responseCreate200"
+        400:
+          "$ref": "#/components/responses/responsePod400"
+        404:
+          "$ref": "#/components/responses/responsePod404"
+        "500":
+          "$ref": "#/components/responses/responseCreate500"
+  ##"/tracker/{tracking}":
+  ##  parameters: 
+  ##    - "$ref": '#/components/parameters/tracking'
+  ##  get:
+  ##    description: |
+  ##      En este endpoint permite realizar el seguimiento del envio, 
+  ##      también el historial de cambios de estado.
+  ##    operationId: Tracking Orden
+  ##    parameters: 
+  ##      - "$ref": '#/components/parameters/queryEnterpriseKey'
+  ##    responses:
+  ##      "200":
+  ##        "$ref": "#/components/responses/responseStatus200"
+  ##      400:
+  ##        "$ref": "#/components/responses/responsePod400"
+  ##      404:
+  ##        "$ref": "#/components/responses/responsePod404"
+  ##      "500":
+  ##        "$ref": "#/components/responses/responseCreate500"
+  "/pod/{tracking}":
+    parameters: 
+      - "$ref": '#/components/parameters/tracking'
+    get:
+      description: Este endpoint nos permite obtener los documento y/o imagenes que sustentan en la entrega o falla de la entrega.
+      operationId: Pod
+      parameters:
+        - "$ref": '#/components/parameters/queryEnterpriseKey'
+      responses:
+        "200":
+          "$ref": "#/components/responses/responsePod200"
+        400:
+          "$ref": "#/components/responses/responsePod400"
+        404:
+          "$ref": "#/components/responses/responsePod404"
+        "500":
+          "$ref": "#/components/responses/responseCreate500"
+  "/tag/{tracking}":
+    parameters: 
+      - "$ref": '#/components/parameters/tracking'
+    get:
+      description: |
+        Con este endpoint obtiene el listado de etiqueta del envío.
+
+        ## Modelo de etiqueta
+
+        ![Imagen del paso 2](https://raw.githubusercontent.com/Meiser-Gamboa/docs-integrations-dali/main/public/images/tag-model02.png)
+
+        A continuación, se detalla cada punto de la etiqueta:
+
+          1. Codigo interno en nuestro sistema.
+          2. Codigo de barras del punto 1.
+          3. Logo de la tienda custom, por default se coloca nuestro logo.
+          4. Datos del destinatario (nombre de contacto).
+          5. Codigo Qr asociado al envio.
+          6. Telefono de contacto.
+          7. Direccion de entrega.
+          8. Notas o indicaciones de entrega.
+          9. Codigo postal asociado en el sistema.
+          10. Nombre del market place que crea la orden.
+          11. Codigo externo (trackcode) enviado en la integración al crear la orden.
+          12. Descripción de la Zona asociada al envio.
+          13. Zona interna de nuestro sistema.
+
+        Al utilizar el query param 'format' con el valor 'zpl' este permite descargar 
+        el archivo con el codigo para la impresora y posee el siguiente modelo:
+        
+        ![Imagen del paso 2](https://raw.githubusercontent.com/Meiser-Gamboa/docs-integrations-dali/main/public/images/tag-model03.png)
+
+          1. Codigo interno en nuestro sistema.
+          2. Codigo de barras del punto 1.
+          3. Datos del destinatario (nombre de contacto).
+          4. Telefono de contacto.
+          5. Direccion de entrega.
+          6. Notas o indicaciones de entrega.
+          7. Codigo postal asociado en el sistema.
+          8. Zona interna de nuestro sistema.
+          9. Logo de la tienda custom, por default se coloca nuestro logo.
+          10. Codigo Qr asociado al envio.
+          11. Descripción del tipo de envio en la integración al crear la orden.
+          12. Nombre del market place que crea la orden.
+          13. Codigo externo (trackcode) enviado en la integración al crear la orden.
+
+        Para descargar el pdf en formato base64 se debe utilizar el query param 'format' con el valor 'pdf_base64'.
+
+      operationId: Etiqueta (tag)
+      parameters:
+        - "$ref": '#/components/parameters/queryEnterpriseKey'
+        - "$ref": '#/components/parameters/queryFormat'
+      responses:
+        "200":
+          "$ref": "#/components/responses/responseLabel200"
+        400:
+          "$ref": "#/components/responses/responsePod400"
+        404:
+          "$ref": "#/components/responses/responsePod404"
+        "500":
+          "$ref": "#/components/responses/responseCreate500"
+  "/{tracking}":
+    parameters: 
+      - "$ref": '#/components/parameters/tracking'
+    get:
+      description: Esta API nos permite ver los estados por los que pasó la entrega, agrupados por servicios. Los grupos de servicios hacen referencia al número de intentos realizados para realizar la entrega.
+      operationId: Tracking Orden
+      parameters:
+        - "$ref": '#/components/parameters/queryEnterpriseKey'
+      responses:
+        "200":
+          "$ref": "#/components/responses/responseDetails200"
+        400:
+          "$ref": "#/components/responses/responsePod400"
+        404:
+          "$ref": "#/components/responses/responsePod404"
+        "500":
+          "$ref": "#/components/responses/responseCreate500"
+
+webhooks:
+  updateStatus:
+    post:
+      summary: Notificaciones de estado
+      description: |
+        La actualización de estados se produce cada vez que se genera un evento de cambio en el flujo de un envío. 
+
+        ## Estados de envio:
+
+        Los posibles valores para shipment_status son:
+
+          - **DELIVERED:** Entregado
+          - **CANCELLED:** Cancelado
+          - **CROSSDOCKED:** Arribado al depósito
+          - **DELIVERY_ASSIGNED:** Asignado a una ruta de entrega
+          - **TO_DELIVERY:** En camino a ser entregado (es el próximo de la lista)
+          - **FAILED_DELIVERY:** No se ha podido entregar, posible reintento de entrega según políticas del operador logístico.
+          - **RETURNED:** Devuelto al seller.
+          - **DSL_PACKAGE:** El envío fue marcado como dañado, perdido o robado.
+          - **RETURN_IN_PROGRESS:** Se encuentra en proceso de devolución.
+          - **PICKED_UP:** El envio fue recogido.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                shipment_id:
+                  type: string
+                  description: Corresponde al número de envío, en caso de que el envío conste de un solo paquete este número coincide con el tracking_number.
+                  example: XYZ1231233
+                shipment_status:
+                  type: string
+                  description: El estado del envío.
+                  example: CROSSDOCKED
+                statuses:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      tracking_number:
+                        type: string
+                        description: Número de seguimiento asociado al paquete.
+                        example: BMN231333123
+                      shipment_status:
+                        type: string
+                        description: el estado del paquete.
+                        example: CROSSDOCKED
+                      timestamp:
+                        type: string
+                        description: Hora en que se produjo el evento, cambio de estado.
+                        format: date-time
+                        example: 2023-08-09T17:16:30Z
+                    required:
+                      - tracking_number
+                      - shipment_status
+                      - timestamp
+              required:
+                - shipment_id
+                - shipment_status
+                - statuses
+
+components:
+  schemas:
+    geoData:
+      type: object
+      description: Estructura de las coordenadas de la dirección de recojo o entrega.
+      properties:
+        lat:
+          type: number
+          description: Coordenadas de la dirección de recojo o entrega (latitud).
+          example: -12.0052
+        lng:
+          type: number
+          description: Coordenadas de la dirección de recojo o entrega (longitude).
+          example: -90.0034
+    address:
+      type: object
+      description: |
+        Estructura con la información de recojo o entrega,
+        para la estura 'origen' es posible enviar null si se desea tomar la dirección 
+        registrada en el marketplace por defecto.
+
+        **Nota:** En el campo 'line' debe venir la dirección, el número de la calle, localidad/barrio, 
+        ciudad, país, código postal. No es obligatorio que venga toda esta información, pero 
+        mientras más detalle mayor probabilidad de que sea localizada. Solo datos de dirección, 
+        no comentarios acerca de la dirección.
+      properties:
+        line:
+          type: string
+          description: |
+            **(Length Max: 100)** Dirección de recojo o entrega de los productos.
+          maxLength: 100
+          example: XXXXXXXXXXXXXXXXXXXXXXXXX
+        zip:
+          type: string
+          description: |
+            **(Length Max: 5)** Código postal de la dirección para el recojo o entrega de los productos.
+          maxLength: 5
+          example: "15314"
+        route:
+          type: string
+          description: Nombre de la dirección para el recojo o entrega de los productos.
+          example: " "
+        streetNumber:
+          type: number
+          description: Numero de la dirección para el recojo o entrega de los productos.
+          example: 0
+        locality:
+          type: string
+          description: |
+            **(Length Max: 40)** Distrito o localidad donde se realiza el recojo o entrega de los productos.
+          maxLength: 40
+          example: XXXXXXXXXXXXXXXXXXXXXXXXX
+        region:
+          type: string
+          description: (deprecated) Provincia donde se realiza el recojo o entrega de los productos
+          example: XXXXXXXXXXXXXXXXXXXXXXXXX
+        latLng:
+          "$ref": "#/components/schemas/geoData"
+      required:
+        - line
+    origin:
+      type: object
+      properties:
+        name:
+          type: string
+          description: |
+            **(Length Max: 50)** Nombres de contacto para el recojo o entrega de productos.
+          maxLength: 50
+          example: XXXXXXXXXXXXXXXXXXXXXXXXX
+        phone:
+          type: string
+          description: |
+            **(Length Max: 12)** Numero de telefono/celular de contacto para el recojo o entrega de productos.
+          maxLength: 12
+          example: XXXXX-xxxxx
+        email:
+          type: string
+          description: Email para notificación el recojo o entrega de los productos.
+          example: mail@mail.com
+        reference:
+          type: string
+          description: Referencias de direcciones de clientes para el recojo o entrega de los productos.
+          example: "-"
+        notes:
+          type: string
+          description: |
+            **(Length Max: 100)** Datos adicionales que facilitan la recojo o entrega de productos.
+          maxLength: 100
+          example: "-"
+        schedule:
+          type: string
+          description: Datos de franja horaria para el recojo o entrega de productos.
+          example: "08 a 18"
+        address:
+          "$ref": "#/components/schemas/address"
+      required:
+        - name
+        - phone
+        - email
+        - Address
+    product:
+      type: object
+      properties:
+        description:
+          type: string
+          description: Descripción o nombres de los productos de la orden.
+          example: "XXXXXXX XXXXXXXXX XXXXXXXX"
+        value:
+          type: number
+          description: |
+            Precio o valor de paquetes.
+          example: 0
+        quantity:
+          type: number
+          description: |
+            Número total de paquetes.
+            
+            **Nota:** al enviar 0, se crea una sola etiqueta para el envío, de 
+            lo contrario se genera una etiqueta según la cantidad de paquetes.
+          example: 0
+        size:
+          type: string
+          description: Tamaño promedio de los paquetes.
+          example: "Chico"
+        physicalAttributes:
+          "$ref": "#/components/schemas/physicalAttributes"
+      required:
+        - description
+    physicalAttributes:
+      type: object
+      properties:
+        dimensions:
+          type: object
+          properties:
+            height:
+              type: number
+              description: Altura promedio de los paquetes.
+              example: 0
+            width:
+              type: number
+              description: Ancho promedio de los paquetes.
+              example: 0
+            length:
+              type: number
+              description: Largo promedio de los paquetes.
+              example: 0
+            unit:
+              type: string
+              description: Unidad de los campos para dimensiones.
+              example: "cm"
+        weight:
+          type: object
+          properties:
+            value:
+              type: number
+              description: Valor del peso.
+              example: 0
+            unit:
+              type: string
+              description: Unidad del peso.
+              example: "gr"
+    shipment:
+      type: object
+      properties:
+        tracking:
+          type: string
+          description: Código de orden o código de seguimiento, con este código podrás rastrear el pedido.
+          example: XXXXX-12345
+        type:
+          type: string
+          description: |
+            Código que identifica el tipo de servicio de entrega disponible.
+
+            Puede tomar uno de los siguientes valores:
+
+            | Código de servicio | Descripción |
+            | ------------------- | ----------- |
+            | NEXTDAY | El pedido se entregará al día siguiente. |
+            | SAMEDAY | El pedido se entregará el mismo día. |
+            | SAMEDAY_EXPRESS | El pedido se entregará el mismo día, con un tiempo estimado de entrega de 2 horas. |
+            | 48HOURS | El pedido se entregará dentro de las 48 horas siguientes. |
+            | ONEWEEK | El pedido se entregará durante la semana siguiente. |
+            | TWOWEEKS | El pedido se entregará dentro de las 2 semanas siguientes. |
+            | PICKUP_STORE | El pedido estará disponible para retiro en tienda o punto de recojo. |
+
+            **Nota:**  
+            Para el servicio `NEXTDAY`, existe una **hora límite** para la recepción del pedido.  
+            Si el pedido se recibe antes de dicha hora, la entrega se realizará al día siguiente.  
+            En caso contrario, se programará para el siguiente día hábil.  
+            La hora límite específica puede ser consultada con el área comercial.
+          example: "SAMEDAY"
+        cod:
+          type: number
+          description: |
+            Para el valor 0 (false) es envio se indica como pagado, para el 
+            valor 1 (true) el pago se realiza en la dirección de destino 
+            (contra reembolso), el importe a cobrar al destinatario final es 
+            enviado en el campo value dentro de product.
+          example: 0
+        change:
+          type: bool
+          description: |
+            Indicador de lógica inversa, nos permite realizar en caso de 
+            ser necesario el recojo de ordenes para devolución desde el cliente
+            final.
+          example: false
+        product:
+          "$ref": "#/components/schemas/product"
+        origin:
+          "$ref": "#/components/schemas/origin"
+        destination:
+          "$ref": "#/components/schemas/origin"
+      required:
+        - type
+        - change
+        - product
+        - origin
+        - destination
+    createShipment:
+      type: object
+      properties:
+        shipment:
+          "$ref": "#/components/schemas/shipment"
+  responses:
+    addressResponse:
+      type: object
+      properties:
+        address:
+          type: string
+          description: Dirección de recojo o entrega de los productos.
+          example: "Calle F. Valle Riestra 576, San Isidro, Lima 15074, Perú"
+        name:
+          type: string
+          description: Nombres de contacto para el recojo o entrega de productos.
+          example: XXXXXXXXXXXXXXXXXXXXXXXXX
+        phone:
+          type: string
+          description: Numero de telefono/celular de contacto para el recojo o entrega de productos.
+          example: XXXXX-xxxxx
+        email:
+          type: string
+          description: Email para notificación el recojo o entrega de los productos.
+          example: mail@mail.com
+        reference:
+          type: string
+          description: Referencias de direcciones de clientes para el recojo o entrega de los productos.
+          example: "-"
+        notes:
+          type: string
+          description: Datos adicionales que facilitan la recojo o entrega de productos.
+          example: "-"
+        schedule:
+          type: string
+          description: Datos de franja horaria para el recojo o entrega de productos.
+          example: "08 a 18"
+    contactResponse:
+      type: object
+      properties:
+        reference:
+          type: string
+          description: Referencias de direcciones de clientes para el recojo o entrega de los productos.
+          example: "-"
+        notes:
+          type: string
+          description: Datos adicionales que facilitan la recojo o entrega de productos.
+          example: "-"
+        schedule:
+          type: string
+          description: Datos de franja horaria para el recojo o entrega de productos. 
+          example: "-"
+        address:
+          type: object
+          properties:
+            line:
+              type: string
+              description: Dirección de recojo o entrega de los productos.
+              example: XXXXXXXXXXXXXXXXXXXXXXXXX
+            latLng:
+              "$ref": "#/components/schemas/geoData"
+    historyResponse:
+      type: object
+      properties:
+        date:
+          type: string
+          description: Fecha de evento en formato RFC-3339 (ISO-8601) en UTC.
+          example: "2024-06-20T19:05:08Z"
+        statusCode:
+          type: string
+          description: Codigo del evento (estado) generado.
+          example: "CROSSDOCKED"
+        status:
+          type: string
+          description: Detalle del evento generado, el valor de este campo es variable a la integración.
+          example: "En Chazki"
+        agent:
+          type: string
+          description: Campo desactualizado.
+          example: "N/A"
+        controlled:
+          type: boolean
+          description: Describe estados con el driver.
+          example: true
+        reason: 
+          type: string
+          description: motivo o rason de rechazo o incidente indicado por el driver.
+          example: "Zona no accesible"
+    "responseCreate200":
+      description: Respuesta satisfactoria.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              shipment:
+                type: object
+                description: Datos recibidos en la creación de ordenes para realizar el envío.
+                properties:
+                  tracking:
+                    type: string
+                    description: Código de orden o código de seguimiento, con este código podrás rastrear el pedido.
+                    example: XXXXX-12345
+                  type:
+                    type: string
+                    description: |
+                      Código del tipo de servicio de entrega. 
+                      
+                      Puede tomar los siguientes valores:
+
+                      | Servicio (Todos los países) | Descripción |
+                      | ------------- | ------------ |
+                      | NEXT DAY | El pedido se enviará al día siguiente. |
+                      | SAME DAY | El pedido se enviará el mismo día. |
+                      | ONEWEEK | El pedido se enviará a la semana siguiente. |
+                      | PICKUP_STORE | El pedido se colocara en un punto de recojo (retiro en tienda). |
+
+                      **Nota:** Paara el servicio 'NEXT DAY' se tiene una hora limite
+                      en el cual se realizara la entrega si se recibe antes de la hora 
+                      límite, en caso contrario se enviará al día siguiente (La hora 
+                      límite se puede solicitar al área comercial).
+                    example: "SAME DAY"
+                  change:
+                    type: bool
+                    description: |
+                      Indicador de lógica inversa, nos permite realizar en caso 
+                      de ser necesario el recojo de ordenes para devolución desde 
+                      el cliente final.
+                    example: false
+                  product:
+                    type: object
+                    properties:
+                      size:
+                        type: object
+                        properties:
+                          code:
+                            type: string
+                            description: Tamaño promedio de los paquetes.
+                            example: "Chico"
+                          dimensions:
+                            type: object
+                            properties:
+                              height:
+                                type: number
+                                description: Altura promedio de los paquetes.
+                                example: 0
+                              width:
+                                type: number
+                                description: Ancho promedio de los paquetes.
+                                example: 0
+                              length:
+                                type: number
+                                description: Largo promedio de los paquetes.
+                                example: 0
+                  origin:
+                    "$ref": "#/components/responses/addressResponse"
+                  destination:
+                    "$ref": "#/components/responses/addressResponse"
+                  status:
+                    type: string
+                    description: Estado del envío.
+                    example: QUEUE
+                  created:
+                    type: string
+                    description: |
+                      Fecha de creación en formato RFC-3339 (ISO-8601) en UTC.
+                    example: "2024-06-20T18:21:21Z"
+                  removed:
+                    type: bool
+                    description: |
+                      Indicador que informa si el pedido se encuentra en 
+                      estado cancelado, eliminado y/o anulado.
+                    example: false
+                  trackingUrl:
+                    type: string
+                    description: Enlace de seguimiento de pedido.
+                    example: "https://tracking.ng.paquery.com/package/MzU1MTM5Ng"
+    "responseCreate500":
+      description: El error se mostrará en texto simple indicando el motivo.
+    "responseStatus200":
+      description: Respuesta satisfactoria.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              shipment:
+                type: object
+                description: Datos recibidos en la creación de ordenes para realizar el envío.
+                properties:
+                  created:
+                    type: string
+                    description: |
+                      Fecha de creación en formato RFC-3339 (ISO-8601) en UTC.
+                    example: "2024-06-20T18:21:21Z"
+                  tracking:
+                    type: string
+                    description: Código de orden o código de seguimiento, con este código podrás rastrear el pedido.
+                    example: XXXXX-12345
+                  type:
+                    type: string
+                    description: |
+                      Código del tipo de servicio de entrega. 
+                      
+                      Puede tomar los siguientes valores:
+
+                      | Servicio (Todos los países) | Descripción |
+                      | ------------- | ------------ |
+                      | NEXT DAY | El pedido se enviará al día siguiente. |
+                      | SAME DAY | El pedido se enviará el mismo día. |
+
+                      **Nota:** Paara el servicio 'NEXT DAY' se tiene una hora limite
+                      en el cual se realizara la entrega si se recibe antes de la hora 
+                      límite, en caso contrario se enviará al día siguiente (La hora 
+                      límite se puede solicitar al área comercial).
+                    example: "SAME DAY"
+                  kind:
+                    type: string
+                    description: Type of service at a commercial level.
+                    example: "B2B"
+                  company:
+                    type: string
+                    description: Nombre asociado al marketplace.
+                    example: false
+                  contact:
+                    "$ref": "#/components/responses/contactResponse"
+                  history:
+                    type: array
+                    items: 
+                      type: object
+                      "$ref": "#/components/responses/historyResponse"
+                  updatable:
+                    type: bool
+                    description: Indica si es posible actualizar los datos de la orden.
+                    example: false
+                  trackingUrl:
+                    type: string
+                    description: Enlace de seguimiento de pedido.
+                    example: "https://tracking.ng.paquery.com/package/MzU1MTM5Ng"
+    "responseLabel200":
+      description: |
+        Se obtiene un archivo pdf con las etiquetas 
+        que se visualiza en el mismo navegador.
+    "responsePod400":
+      description: Respuesta con errores.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                description: Describe el error encontrado.
+                example: "error getting pod: Package 6384179 must be delivered"
+    "responsePod404":
+      description: Respuesta con errores.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error_message:
+                type: string
+                description: Describe el error encontrado.
+                example: "Shipment not found"
+              status_code:
+                type: number
+                description: Codigo de respuesta.
+                example: 404
+    "responsePod200":
+      description: Se obtiene los detalles de entrega en base 64.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: string
+                description: |
+                  PDF con los detalles de entrega en base 64.
+                example: "data:application/pdf;base64,JVBERi0xLjcKJeLjz9.......MTQKc3RhcnR4cmVmCjMxNzMKJSVFT0YK"
+    "responseDetails200":
+      description: Detalles total de la orden.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              tracking:
+                type: string
+                description: Código de orden o código de seguimiento, con este código podrás rastrear el pedido.
+                example: XXXXX-12345
+              type:
+                type: string
+                description: |
+                  Código del tipo de servicio de entrega. 
+                  
+                  Puede tomar los siguientes valores:
+
+                  | Servicio (Todos los países) | Descripción |
+                  | ------------- | ------------ |
+                  | NEXT DAY | El pedido se enviará al día siguiente. |
+                  | SAME DAY | El pedido se enviará el mismo día. |
+
+                  **Nota:** Paara el servicio 'NEXT DAY' se tiene una hora limite
+                  en el cual se realizara la entrega si se recibe antes de la hora 
+                  límite, en caso contrario se enviará al día siguiente (La hora 
+                  límite se puede solicitar al área comercial).
+                example: "SAME DAY"
+              cod:
+                type: number
+                description: |
+                  Para el valor 0 (false) es envio se indica como pagado, para el 
+                  valor 1 (true) el pago se realiza en la dirección de destino 
+                  (contra reembolso), el importe a cobrar al destinatario final es 
+                  enviado en el campo value dentro de product.
+                example: 0
+              kind:
+                type: string
+                description: Type of service at a commercial level.
+                example: "B2B"
+              created:
+                type: string
+                description: |
+                  Fecha de creación en formato RFC-3339 (ISO-8601) en UTC.
+                example: "2024-06-20T18:21:21Z"              
+              update:
+                type: string
+                description: |
+                  Fecha de actualizacion en formato RFC-3339 (ISO-8601) en UTC.
+                example: "2024-06-24T11:20:10Z"
+              status:
+                type: string
+                description: Estado del envío.
+                example: CROSSDOCKED
+              product:
+                "$ref": "#/components/schemas/product"
+              origin:
+                "$ref": "#/components/schemas/origin"
+              destination:
+                "$ref": "#/components/schemas/origin"
+              history:
+                type: array
+                items: 
+                  type: object
+                  "$ref": "#/components/responses/historyResponse"
+
+  parameters:
+    queryEnterpriseKey:
+      name: key
+      in: query
+      description: |
+        Identificador de empresa, es un hash generado 
+        por Chazki para identificar la empresa, se 
+        obtiene una vez generada la empresa dentro de 
+        Chazki por el área comercial.
+      required: true
+      style: form
+      explode: false
+      schema:
+        type: string
+    queryFormat:
+      name: format
+      in: query
+      description: |
+        Permite seleccionar el formato del archivo de la 
+        etiqueta para descargar:
+
+        - **zpl:** Etiqueta como texto en formato zpl (Zebra).
+        - **pdf:** Etiqueta en formato PDF binario.
+        - **pdf_base64:** Etiqueta en formato PDF codificado en base64 dentro de un Json.s
+
+        **Soporta**: ZPL, pdf_base64.
+      style: form
+      explode: false
+      schema:
+        type: string
+    tracking:
+      name: tracking
+      in: path
+      description: |
+        Código de orden o código de seguimiento
+      required: true
+      schema:
+        type: string
