@@ -1,7 +1,7 @@
 ---
-openapi: 3.0.0
+openapi: 3.1.0
 info:
-  title: SEGA - DALI
+  title: Dalí Partners API
   description: |
     Para realizar pedidos de los servicios de Chazki, se habilitaron puntos finales 
     para registrar la entrega y verificar el estado de los pedidos. 
@@ -17,16 +17,32 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   version: 3.0.0
 servers:
-  - url: https://integrations.ng.paquery.com/sega/api/v2/shipment
-    description: Sega Production
+  - url: https://integrations.ng.paquery.com/api
+    description: Partners API
 
+security:
+  - oauth2ClientCredentials:
+      - "api:partner"
+      - "shipments:read"
+      - "shipments:write"
+      - "rates:query"
+
+tags:
+  - name: Shipments
+    description: Operaciones relacionadas con envíos y seguimiento de paquetes
+  - name: Rates
+    description: Operaciones relacionadas con tarifas de envíos
 paths:
-  "/create":
+  "/shipments":
     post:
+      tags:
+        - Shipments
       description: Este endpoint permite registrar un envio.
       operationId: Crear Orden
-      parameters:
-        - "$ref": '#/components/parameters/queryEnterpriseKey'
+      security:
+        - oauth2ClientCredentials:
+            - "api:partner"
+            - "shipments:write"
       requestBody:
         required: true
         content:
@@ -42,33 +58,18 @@ paths:
           "$ref": "#/components/responses/responsePod404"
         "500":
           "$ref": "#/components/responses/responseCreate500"
-  ##"/tracker/{tracking}":
-  ##  parameters: 
-  ##    - "$ref": '#/components/parameters/tracking'
-  ##  get:
-  ##    description: |
-  ##      En este endpoint permite realizar el seguimiento del envio, 
-  ##      también el historial de cambios de estado.
-  ##    operationId: Tracking Orden
-  ##    parameters: 
-  ##      - "$ref": '#/components/parameters/queryEnterpriseKey'
-  ##    responses:
-  ##      "200":
-  ##        "$ref": "#/components/responses/responseStatus200"
-  ##      400:
-  ##        "$ref": "#/components/responses/responsePod400"
-  ##      404:
-  ##        "$ref": "#/components/responses/responsePod404"
-  ##      "500":
-  ##        "$ref": "#/components/responses/responseCreate500"
-  "/pod/{tracking}":
+  "/shipments/{trackingNumber}/pod":
     parameters: 
-      - "$ref": '#/components/parameters/tracking'
+      - "$ref": '#/components/parameters/trackingNumber'
     get:
+      tags:
+        - Shipments
       description: Este endpoint nos permite obtener los documento y/o imagenes que sustentan en la entrega o falla de la entrega.
       operationId: Pod
-      parameters:
-        - "$ref": '#/components/parameters/queryEnterpriseKey'
+      security:
+        - oauth2ClientCredentials:
+            - "api:partner"
+            - "shipments:read"
       responses:
         "200":
           "$ref": "#/components/responses/responsePod200"
@@ -78,9 +79,9 @@ paths:
           "$ref": "#/components/responses/responsePod404"
         "500":
           "$ref": "#/components/responses/responseCreate500"
-  "/tag/{tracking}":
+  "/shipments/{trackingNumber}/tag":
     parameters: 
-      - "$ref": '#/components/parameters/tracking'
+      - "$ref": '#/components/parameters/trackingNumber'
     get:
       description: |
         Con este endpoint obtiene el listado de etiqueta del envío.
@@ -127,8 +128,13 @@ paths:
         Para descargar el pdf en formato base64 se debe utilizar el query param 'format' con el valor 'pdf_base64'.
 
       operationId: Etiqueta (tag)
+      tags:
+        - Shipments
+      security:
+        - oauth2ClientCredentials:
+            - "api:partner"
+            - "shipments:read"
       parameters:
-        - "$ref": '#/components/parameters/queryEnterpriseKey'
         - "$ref": '#/components/parameters/queryFormat'
       responses:
         "200":
@@ -139,14 +145,18 @@ paths:
           "$ref": "#/components/responses/responsePod404"
         "500":
           "$ref": "#/components/responses/responseCreate500"
-  "/{tracking}":
+  "/shipments/{trackingNumber}/status":
     parameters: 
-      - "$ref": '#/components/parameters/tracking'
+      - "$ref": '#/components/parameters/trackingNumber'
     get:
+      tags:
+        - Shipments
       description: Esta API nos permite ver los estados por los que pasó la entrega, agrupados por servicios. Los grupos de servicios hacen referencia al número de intentos realizados para realizar la entrega.
       operationId: Tracking Orden
-      parameters:
-        - "$ref": '#/components/parameters/queryEnterpriseKey'
+      security:
+        - oauth2ClientCredentials:
+            - "api:partner"
+            - "shipments:read"
       responses:
         "200":
           "$ref": "#/components/responses/responseDetails200"
@@ -156,7 +166,101 @@ paths:
           "$ref": "#/components/responses/responsePod404"
         "500":
           "$ref": "#/components/responses/responseCreate500"
+  
+  "/rates/address":
+    post:
+      tags:
+        - Rates
+      description: Este endpoint permite obtener las tarifas de envío para una dirección específica.
+      operationId: Obtener Tarifas por Dirección
+      security:
+        - oauth2ClientCredentials:
+            - "api:partner"
+            - "rates:query"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                destination_address:
+                  type: object
+                  properties:
+                    address:
+                      type: string
+                      description: Dirección de destino para el envío.
+                      example: "4 de Enero 4971"
+                    district:
+                      type: string
+                      description: Distrito o localidad de destino.
+                      example: "Santa Fe"
+                    country:
+                      type: string
+                      description: País de destino.
+                      example: "Argentina"
+                  required:
+                    - address
+                    - district
+                    - country
+                package_size:
+                  type: string
+                  description: Tamaño del paquete.
+                  enum:
+                    - small
+                    - medium
+                    - large
+                  example: "small"
+              required:
+                - destination_address
+                - package_size
+      responses:
+        200:
+          "$ref": "#/components/responses/responseRates200"
+        400:
+          "$ref": "#/components/responses/responsePod400"
+        404:
+          "$ref": "#/components/responses/responsePod404"
+        "500":
+          "$ref": "#/components/responses/responseCreate500"
 
+  "/rates/zip_code/{zipCode}/package_size/{size}":
+    parameters: 
+      - name: zipCode
+        in: path
+        description: Código postal de destino. *Actualmente válido solo para Argentina*
+        required: true
+        schema:
+          type: string
+      - name: size
+        in: path
+        description: Tamaño del paquete
+        required: true
+        schema:
+          type: string
+          enum:
+            - small
+            - medium
+            - large
+          
+    get:
+      tags:
+        - Rates
+      description: Este endpoint permite obtener las tarifas de envío basadas en el código postal y el tamaño del paquete.**Actualmente válido solo para Argentina**
+      operationId: Obtener Tarifas por Código Postal y Tamaño de Paquete
+      security:
+        - oauth2ClientCredentials:
+            - "api:partner"
+            - "rates:query"
+      responses:
+        200:
+          "$ref": "#/components/responses/responseRates200"
+        400:
+          "$ref": "#/components/responses/responsePod400"
+        404:
+          "$ref": "#/components/responses/responsePod404"
+        "500":
+          "$ref": "#/components/responses/responseCreate500"
 webhooks:
   updateStatus:
     post:
@@ -166,7 +270,7 @@ webhooks:
 
         ## Estados de envio:
 
-        Los posibles valores para shipment_status son:
+        Los posibles valores para shipment_status y Package_status son:
 
           - **DELIVERED:** Entregado
           - **CANCELLED:** Cancelado
@@ -221,6 +325,18 @@ webhooks:
                 - statuses
 
 components:
+  securitySchemes:
+    oauth2ClientCredentials:
+      type: oauth2
+      description: OAuth2 client credentials flow for API authentication
+      flows:
+        clientCredentials:
+          tokenUrl: https://oauth.ng.paquery.com/partners/token
+          scopes:
+            "api:partner": Access to partner APIs
+            "shipments:read": Read access to shipment data
+            "shipments:write": Write access to create and modify shipments
+            "rates:query": Query access to rates and pricing information
   schemas:
     geoData:
       type: object
@@ -381,6 +497,21 @@ components:
               type: string
               description: Unidad del peso.
               example: "gr"
+    dimensions:
+      type: object
+      properties:
+        height:
+          type: number
+          description: Altura promedio de los paquetes.
+          example: 0
+        width:
+          type: number
+          description: Ancho promedio de los paquetes.
+          example: 0
+        length:
+          type: number
+          description: Largo promedio de los paquetes.
+          example: 0
     shipment:
       type: object
       properties:
@@ -391,25 +522,22 @@ components:
         type:
           type: string
           description: |
-            Código que identifica el tipo de servicio de entrega disponible.
+            Código del tipo de servicio de entrega. 
+            
+            Puede tomar los siguientes valores:
 
-            Puede tomar uno de los siguientes valores:
+            | Servicio (Todos los países) | Descripción |
+            | ------------- | ------------ |
+            | NEXTDAY | El pedido se enviará al día siguiente. |
+            | SAMEDAY | El pedido se enviará el mismo día. |
+            | ONEWEEK | El pedido se enviará a la semana siguiente. |
+            | TWOWEEKS | El pedido se enviará en las 2 semanas siguientes. |
+            | PICKUP_STORE | El pedido se colocara en un punto de recojo (retiro en tienda). |
 
-            | Código de servicio | Descripción |
-            | ------------------- | ----------- |
-            | NEXTDAY | El pedido se entregará al día siguiente. |
-            | SAMEDAY | El pedido se entregará el mismo día. |
-            | SAMEDAY_EXPRESS | El pedido se entregará el mismo día, con un tiempo estimado de entrega de 2 horas. |
-            | 48HOURS | El pedido se entregará dentro de las 48 horas siguientes. |
-            | ONEWEEK | El pedido se entregará durante la semana siguiente. |
-            | TWOWEEKS | El pedido se entregará dentro de las 2 semanas siguientes. |
-            | PICKUP_STORE | El pedido estará disponible para retiro en tienda o punto de recojo. |
-
-            **Nota:**  
-            Para el servicio `NEXTDAY`, existe una **hora límite** para la recepción del pedido.  
-            Si el pedido se recibe antes de dicha hora, la entrega se realizará al día siguiente.  
-            En caso contrario, se programará para el siguiente día hábil.  
-            La hora límite específica puede ser consultada con el área comercial.
+            **Nota:** Paara el servicio 'NEXT DAY' se tiene una hora limite
+            en el cual se realizara la entrega si se recibe antes de la hora 
+            límite, en caso contrario se enviará al día siguiente (La hora 
+            límite se puede solicitar al área comercial).
           example: "SAMEDAY"
         cod:
           type: number
@@ -578,20 +706,7 @@ components:
                             description: Tamaño promedio de los paquetes.
                             example: "Chico"
                           dimensions:
-                            type: object
-                            properties:
-                              height:
-                                type: number
-                                description: Altura promedio de los paquetes.
-                                example: 0
-                              width:
-                                type: number
-                                description: Ancho promedio de los paquetes.
-                                example: 0
-                              length:
-                                type: number
-                                description: Largo promedio de los paquetes.
-                                example: 0
+                            "$ref": "#/components/schemas/dimensions"
                   origin:
                     "$ref": "#/components/responses/addressResponse"
                   destination:
@@ -784,21 +899,48 @@ components:
                 items: 
                   type: object
                   "$ref": "#/components/responses/historyResponse"
+                  
+    "responseRates200":
+      description: Lista de tarifas disponibles para el envío.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: Identificador único de la tarifa.
+                      example: 3115
+                    rate:
+                      type: number
+                      format: float
+                      description: Precio de la tarifa de envío.
+                      example: 3256.23
+                    currency:
+                      type: string
+                      description: Moneda en la que se expresa la tarifa.
+                      example: "ARS"
+                    package_size:
+                      type: string
+                      description: Tamaño del paquete para esta tarifa.
+                      example: "small"
+                    delivery_term:
+                      type: string
+                      description: Tipo de entrega o servicio.
+                      example: "priority"
+                  required:
+                    - id
+                    - rate
+                    - currency
+                    - package_size
+                    - delivery_term
 
   parameters:
-    queryEnterpriseKey:
-      name: key
-      in: query
-      description: |
-        Identificador de empresa, es un hash generado 
-        por Chazki para identificar la empresa, se 
-        obtiene una vez generada la empresa dentro de 
-        Chazki por el área comercial.
-      required: true
-      style: form
-      explode: false
-      schema:
-        type: string
     queryFormat:
       name: format
       in: query
@@ -815,8 +957,8 @@ components:
       explode: false
       schema:
         type: string
-    tracking:
-      name: tracking
+    trackingNumber:
+      name: trackingNumber
       in: path
       description: |
         Código de orden o código de seguimiento
