@@ -32,7 +32,7 @@ const APIDocsPage = () => {
   // URL del spec servido desde /public
   const specUrl = useMemo(() => {
     if (!integration || !currentVersion) return null;
-    return `https://raw.githubusercontent.com/Meiser-Gamboa/docs-integrations-dali/main/src/docs/${integration}_${currentVersion}.yaml`;
+    return `/docs/${integration}/${currentVersion}.yaml`;
   }, [integration, currentVersion]);
 
   if (!integration || !supportedVersions.length) {
