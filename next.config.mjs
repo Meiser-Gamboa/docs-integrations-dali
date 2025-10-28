@@ -9,7 +9,7 @@ const nextConfig = {
         },
           {
             source: '/sega',
-            destination: '/sega/v2',
+            destination: '/sega/v3',
             permanent: false, 
         },
     ];
