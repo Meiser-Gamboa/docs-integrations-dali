@@ -20,13 +20,6 @@ servers:
   - url: https://integrations.ng.paquery.com/api
     description: Partners API
 
-security:
-  - oauth2ClientCredentials:
-      - "api:partner"
-      - "shipments:read"
-      - "shipments:write"
-      - "rates:query"
-
 tags:
   - name: Shipments
     description: Operaciones relacionadas con envíos y seguimiento de paquetes
@@ -148,15 +141,18 @@ paths:
   "/shipments/{trackingNumber}/status":
     parameters: 
       - "$ref": '#/components/parameters/trackingNumber'
+      - name: Authorization
+        in: header
+        required: true
+        description: Token JWT de autorización
+        schema:
+          type: string
+          example: Bearer {{jwt_token}}
     get:
       tags:
         - Shipments
       description: Esta API nos permite ver los estados por los que pasó la entrega, agrupados por servicios. Los grupos de servicios hacen referencia al número de intentos realizados para realizar la entrega.
       operationId: Tracking Orden
-      security:
-        - oauth2ClientCredentials:
-            - "api:partner"
-            - "shipments:read"
       responses:
         "200":
           "$ref": "#/components/responses/responseDetails200"
