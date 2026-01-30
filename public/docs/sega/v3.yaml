@@ -21,21 +21,108 @@ servers:
     description: Partners API
 
 tags:
+  - name: Authentication
+    description: Credenciales y Autenticación
   - name: Shipments
     description: Operaciones relacionadas con envíos y seguimiento de paquetes
   - name: Rates
     description: Operaciones relacionadas con tarifas de envíos
+
 paths:
+  /partners/token:
+    post:
+      tags:
+        - Authentication
+      summary: Obtener access token
+      description: |
+        Obtiene un token OAuth2 usando Client Credentials.
+
+        ## Credenciales y Autenticación
+
+        Esta API utiliza **OAuth2 – Client Credentials**.
+
+        ### 🔑 Credenciales requeridas
+        - `client_id`
+        - `client_secret`
+        - `scope`
+
+        ### Flujo de autenticación
+        1. Solicita un token usando el endpoint de autenticación
+        2. Usa el token en los endpoints protegidos
+
+        ```
+        Authorization: Bearer <access_token>
+        ```
+      operationId: getPartnerToken
+      security: []   # 👈 público
+
+      # 👇 dominio distinto solo para OAuth
+      servers:
+        - url: https://oauth.ng.paquery.com
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - grant_type
+                - client_id
+                - client_secret
+                - scope
+              properties:
+                grant_type:
+                  type: string
+                  example: client_credentials
+                  default: client_credentials
+                  description: Tipo de grant OAuth2 (valor fijo)
+                client_id:
+                  type: string
+                  example: your-client-id
+                client_secret:
+                  type: string
+                  example: your-client-secret
+                scope:
+                  type: string
+                  example: api:partner api:shipments api:rates
+      responses:
+        "200":
+          description: Token generado correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                  token_type:
+                    type: string
+                    example: Bearer
+                  expires_in:
+                    type: integer
+                    example: 3600
+                  refresh_expires_in:
+                    type: integer
+                    example: 0
+                  not-before-policy:
+                    type: integer
+                    example: 1643897415
+                  scope:
+                    type: string
+                    example: api:partner api:rates
+
   "/shipments":
     post:
       tags:
         - Shipments
+      summary: Crear Orden
       description: Este endpoint permite registrar un envio.
-      operationId: Crear Orden
+      operationId: createOrder
       security:
         - oauth2ClientCredentials:
             - "api:partner"
-            - "shipments:write"
+            - "api:shipments"
       requestBody:
         required: true
         content:
@@ -57,12 +144,13 @@ paths:
     get:
       tags:
         - Shipments
+      summary: Obtener Prueba de Entrega (POD)
       description: Este endpoint nos permite obtener los documento y/o imagenes que sustentan en la entrega o falla de la entrega.
-      operationId: Pod
+      operationId: getPod
       security:
         - oauth2ClientCredentials:
             - "api:partner"
-            - "shipments:read"
+            - "api:shipments"
       responses:
         "200":
           "$ref": "#/components/responses/responsePod200"
@@ -72,10 +160,11 @@ paths:
           "$ref": "#/components/responses/responsePod404"
         "500":
           "$ref": "#/components/responses/responseCreate500"
-  "/shipments/{trackingNumber}/tag":
+  "/shipments/{trackingNumber}/label":
     parameters: 
       - "$ref": '#/components/parameters/trackingNumber'
     get:
+      summary: Obtener Etiqueta del Envío
       description: |
         Con este endpoint obtiene el listado de etiqueta del envío.
 
@@ -120,18 +209,35 @@ paths:
 
         Para descargar el pdf en formato base64 se debe utilizar el query param 'format' con el valor 'pdf_base64'.
 
-      operationId: Etiqueta (tag)
+      operationId: getShipmentLabel
       tags:
         - Shipments
       security:
         - oauth2ClientCredentials:
             - "api:partner"
-            - "shipments:read"
+            - "api:shipments"
       parameters:
         - "$ref": '#/components/parameters/queryFormat'
       responses:
         "200":
-          "$ref": "#/components/responses/responseLabel200"
+          description: Etiqueta del envío según el formato solicitado.
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: string
+                    description: PDF en base64 con prefijo data URI.
+                    example: "data:application/pdf;base64,JVBERi0xLjc..."
+            text/plain:
+              schema:
+                type: string
+                description: Código ZPL para impresora Zebra.
         400:
           "$ref": "#/components/responses/responsePod400"
         404:
@@ -141,18 +247,16 @@ paths:
   "/shipments/{trackingNumber}/status":
     parameters: 
       - "$ref": '#/components/parameters/trackingNumber'
-      - name: Authorization
-        in: header
-        required: true
-        description: Token JWT de autorización
-        schema:
-          type: string
-          example: Bearer {{jwt_token}}
     get:
       tags:
         - Shipments
+      summary: Tracking Order
       description: Esta API nos permite ver los estados por los que pasó la entrega, agrupados por servicios. Los grupos de servicios hacen referencia al número de intentos realizados para realizar la entrega.
-      operationId: Tracking Orden
+      operationId: getTrackingOrder
+      security:
+        - oauth2ClientCredentials:
+            - "api:partner"
+            - "api:shipments"
       responses:
         "200":
           "$ref": "#/components/responses/responseDetails200"
@@ -167,12 +271,13 @@ paths:
     post:
       tags:
         - Rates
+      summary: Obtener Tarifas por Dirección
       description: Este endpoint permite obtener las tarifas de envío para una dirección específica.
-      operationId: Obtener Tarifas por Dirección
+      operationId: getRatesByAddress
       security:
         - oauth2ClientCredentials:
             - "api:partner"
-            - "rates:query"
+            - "api:rates"
       requestBody:
         required: true
         content:
@@ -242,12 +347,13 @@ paths:
     get:
       tags:
         - Rates
+      summary: Obtener Tarifas por Código Postal y Tamaño de Paquete
       description: Este endpoint permite obtener las tarifas de envío basadas en el código postal y el tamaño del paquete.**Actualmente válido solo para Argentina**
-      operationId: Obtener Tarifas por Código Postal y Tamaño de Paquete
+      operationId: getRatesByZipCodeAndPackageSize
       security:
         - oauth2ClientCredentials:
             - "api:partner"
-            - "rates:query"
+            - "api:rates"
       responses:
         200:
           "$ref": "#/components/responses/responseRates200"
@@ -329,10 +435,9 @@ components:
         clientCredentials:
           tokenUrl: https://oauth.ng.paquery.com/partners/token
           scopes:
-            "api:partner": Access to partner APIs
-            "shipments:read": Read access to shipment data
-            "shipments:write": Write access to create and modify shipments
-            "rates:query": Query access to rates and pricing information
+            "api:partner": Access to partner APIs.
+            "api:shipments": Access to create shipment data.
+            "api:rates": Access to rates and pricing information.
   schemas:
     geoData:
       type: object
@@ -431,7 +536,7 @@ components:
         - name
         - phone
         - email
-        - Address
+        - address
     product:
       type: object
       properties:
@@ -544,7 +649,7 @@ components:
             enviado en el campo value dentro de product.
           example: 0
         change:
-          type: bool
+          type: boolean
           description: |
             Indicador de lógica inversa, nos permite realizar en caso de 
             ser necesario el recojo de ordenes para devolución desde el cliente
@@ -685,7 +790,7 @@ components:
                       límite se puede solicitar al área comercial).
                     example: "SAME DAY"
                   change:
-                    type: bool
+                    type: boolean
                     description: |
                       Indicador de lógica inversa, nos permite realizar en caso 
                       de ser necesario el recojo de ordenes para devolución desde 
@@ -717,7 +822,7 @@ components:
                       Fecha de creación en formato RFC-3339 (ISO-8601) en UTC.
                     example: "2024-06-20T18:21:21Z"
                   removed:
-                    type: bool
+                    type: boolean
                     description: |
                       Indicador que informa si el pedido se encuentra en 
                       estado cancelado, eliminado y/o anulado.
@@ -781,7 +886,7 @@ components:
                       type: object
                       "$ref": "#/components/responses/historyResponse"
                   updatable:
-                    type: bool
+                    type: boolean
                     description: Indica si es posible actualizar los datos de la orden.
                     example: false
                   trackingUrl:
@@ -895,7 +1000,6 @@ components:
                 items: 
                   type: object
                   "$ref": "#/components/responses/historyResponse"
-                  
     "responseRates200":
       description: Lista de tarifas disponibles para el envío.
       content:
@@ -953,6 +1057,8 @@ components:
       explode: false
       schema:
         type: string
+        enum: [zpl, pdf, pdf_base64]
+        default: pdf
     trackingNumber:
       name: trackingNumber
       in: path
