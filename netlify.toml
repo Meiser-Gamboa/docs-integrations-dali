@@ -6,6 +6,7 @@
   # El plugin oficial de Next ajusta internamente publish y functions.
   # De todos modos, define publish para evitar warnings en UI.
   publish = ".next"
+  environment = { NODE_VERSION = "22" }
 
 [build.environment]
   # ← fuerza la imagen Jammy (Ubuntu 22.04)
