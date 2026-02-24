@@ -562,7 +562,7 @@ components:
           description: Tamaño promedio de los paquetes.
           example: "Chico"
         physicalAttributes:
-          "$ref": "#/components/schemas/physicalAttributes"
+          "$ref": "#/components/schemas/PhysicalAttributes"
       required:
         - description
     PhysicalAttributes:
