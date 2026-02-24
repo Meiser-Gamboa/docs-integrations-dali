@@ -565,39 +565,63 @@ components:
           "$ref": "#/components/schemas/physicalAttributes"
       required:
         - description
-    physicalAttributes:
+    PhysicalAttributes:
       type: object
+      additionalProperties: false
       properties:
         dimensions:
-          type: object
-          properties:
-            height:
-              type: number
-              description: Altura promedio de los paquetes.
-              example: 0
-            width:
-              type: number
-              description: Ancho promedio de los paquetes.
-              example: 0
-            length:
-              type: number
-              description: Largo promedio de los paquetes.
-              example: 0
-            unit:
-              type: string
-              description: Unidad de los campos para dimensiones.
-              example: "cm"
+          $ref: "#/components/schemas/Dimensions"
         weight:
-          type: object
-          properties:
-            value:
-              type: number
-              description: Valor del peso.
-              example: 0
-            unit:
-              type: string
-              description: Unidad del peso.
-              example: "gr"
+          $ref: "#/components/schemas/Weight"
+
+    Weight:
+      type: object
+      additionalProperties: false
+      required: [value, unit]
+      properties:
+        value:
+          type: number
+          description: Valor del peso. Debe ser mayor a 0.
+          exclusiveMinimum: 0
+          example: 1500
+        unit:
+          type: string
+          description: Unidad del peso.
+          example: gr
+
+    Dimensions:
+      type: object
+      additionalProperties: false
+      description: >
+        Si se envía dimensions, unit es obligatorio y se deben enviar al menos 2
+        de (height, width, length). Cualquier campo enviado debe ser mayor a 0.
+      required: [unit]
+      allOf:
+        # Regla: al menos 2 dimensiones presentes
+        - anyOf:
+            - required: [height, width]
+            - required: [height, length]
+            - required: [width, length]
+      properties:
+        height:
+          type: number
+          description: Altura. Si se envía, debe ser > 0.
+          exclusiveMinimum: 0
+          example: 10
+        width:
+          type: number
+          description: Ancho. Si se envía, debe ser > 0.
+          exclusiveMinimum: 0
+          example: 20
+        length:
+          type: number
+          description: Largo. Si se envía, debe ser > 0.
+          exclusiveMinimum: 0
+          example: 30
+        unit:
+          type: string
+          description: Unidad de dimensiones.
+          example: cm
     dimensions:
       type: object
       properties:
