@@ -599,9 +599,12 @@ components:
       allOf:
         # Regla: al menos 2 dimensiones presentes
         - anyOf:
-            - required: [height, width]
-            - required: [height, length]
-            - required: [width, length]
+            - title: "Height and Width"
+              required: [height, width]
+            - title: "Height and Length"
+              required: [height, length]
+            - title: "Width and Length"
+              required: [width, length]
       properties:
         height:
           type: number
