@@ -111,6 +111,14 @@ paths:
                   scope:
                     type: string
                     example: api:partner api:rates
+        400:
+          "$ref": "#/components/responses/responsePod400"
+        401:
+          "$ref": "#/components/responses/responsePod401"
+        403:
+          "$ref": "#/components/responses/responsePod403"
+        "500":
+          "$ref": "#/components/responses/responsePod500"
 
   "/shipments":
     post:
@@ -134,10 +142,14 @@ paths:
           "$ref": "#/components/responses/responseCreate200"
         400:
           "$ref": "#/components/responses/responsePod400"
+        401:
+          "$ref": "#/components/responses/responsePod401"
+        403:
+          "$ref": "#/components/responses/responsePod403"
         404:
           "$ref": "#/components/responses/responsePod404"
         "500":
-          "$ref": "#/components/responses/responseCreate500"
+          "$ref": "#/components/responses/responsePod500"
   "/shipments/{trackingNumber}/pod":
     parameters: 
       - "$ref": '#/components/parameters/trackingNumber'
@@ -156,10 +168,14 @@ paths:
           "$ref": "#/components/responses/responsePod200"
         400:
           "$ref": "#/components/responses/responsePod400"
+        401:
+          "$ref": "#/components/responses/responsePod401"
+        403:
+          "$ref": "#/components/responses/responsePod403"
         404:
           "$ref": "#/components/responses/responsePod404"
         "500":
-          "$ref": "#/components/responses/responseCreate500"
+          "$ref": "#/components/responses/responsePod500"
   "/shipments/{trackingNumber}/label":
     parameters: 
       - "$ref": '#/components/parameters/trackingNumber'
@@ -240,10 +256,14 @@ paths:
                 description: Código ZPL para impresora Zebra.
         400:
           "$ref": "#/components/responses/responsePod400"
+        401:
+          "$ref": "#/components/responses/responsePod401"
+        403:
+          "$ref": "#/components/responses/responsePod403"
         404:
           "$ref": "#/components/responses/responsePod404"
         "500":
-          "$ref": "#/components/responses/responseCreate500"
+          "$ref": "#/components/responses/responsePod500"
   "/shipments/{trackingNumber}/status":
     parameters: 
       - "$ref": '#/components/parameters/trackingNumber'
@@ -262,10 +282,14 @@ paths:
           "$ref": "#/components/responses/responseDetails200"
         400:
           "$ref": "#/components/responses/responsePod400"
+        401:
+          "$ref": "#/components/responses/responsePod401"
+        403:
+          "$ref": "#/components/responses/responsePod403"
         404:
           "$ref": "#/components/responses/responsePod404"
         "500":
-          "$ref": "#/components/responses/responseCreate500"
+          "$ref": "#/components/responses/responsePod500"
   
   "/rates/address":
     post:
@@ -320,10 +344,14 @@ paths:
           "$ref": "#/components/responses/responseRates200"
         400:
           "$ref": "#/components/responses/responsePod400"
+        401:
+          "$ref": "#/components/responses/responsePod401"
+        403:
+          "$ref": "#/components/responses/responsePod403"
         404:
           "$ref": "#/components/responses/responsePod404"
         "500":
-          "$ref": "#/components/responses/responseCreate500"
+          "$ref": "#/components/responses/responsePod500"
 
   "/rates/zip_code/{zipCode}/package_size/{size}":
     parameters: 
@@ -359,10 +387,14 @@ paths:
           "$ref": "#/components/responses/responseRates200"
         400:
           "$ref": "#/components/responses/responsePod400"
+        401:
+          "$ref": "#/components/responses/responsePod401"
+        403:
+          "$ref": "#/components/responses/responsePod403"
         404:
           "$ref": "#/components/responses/responsePod404"
         "500":
-          "$ref": "#/components/responses/responseCreate500"
+          "$ref": "#/components/responses/responsePod500"
 webhooks:
   updateStatus:
     post:
@@ -573,7 +605,6 @@ components:
           $ref: "#/components/schemas/Dimensions"
         weight:
           $ref: "#/components/schemas/Weight"
-
     Weight:
       type: object
       additionalProperties: false
@@ -588,7 +619,6 @@ components:
           type: string
           description: Unidad del peso.
           example: gr
-
     Dimensions:
       type: object
       additionalProperties: false
@@ -919,7 +949,41 @@ components:
               error:
                 type: string
                 description: Describe el error encontrado.
-                example: "error getting pod: Package 6384179 must be delivered"
+                example: "Request invalid"
+              status_code:
+                type: number
+                description: Codigo de respuesta.
+                example: 400
+    "responsePod401":
+      description: Respuesta con errores.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                description: Describe el error encontrado.
+                example: "authentication error"
+              status_code:
+                type: number
+                description: Codigo de respuesta.
+                example: 401
+    "responsePod403":
+      description: Respuesta con errores.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                description: Describe el error encontrado.
+                example: "not authorized"
+              status_code:
+                type: number
+                description: Codigo de respuesta.
+                example: 403
     "responsePod404":
       description: Respuesta con errores.
       content:
@@ -930,11 +994,26 @@ components:
               error_message:
                 type: string
                 description: Describe el error encontrado.
-                example: "Shipment not found"
+                example: "Customer or Tracking Number not found"
               status_code:
                 type: number
                 description: Codigo de respuesta.
                 example: 404
+    "responsePod500":
+      description: Respuesta con errores.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error_message:
+                type: string
+                description: Describe el error encontrado.
+                example: "Internal (temporary) server error"
+              status_code:
+                type: number
+                description: Codigo de respuesta.
+                example: 500
     "responsePod200":
       description: Se obtiene los detalles de entrega en base 64.
       content:
