@@ -946,10 +946,10 @@ components:
           schema:
             type: object
             properties:
-              error:
+              message:
                 type: string
                 description: Describe el error encontrado.
-                example: "Request invalid"
+                example: "Invalid request."
               status_code:
                 type: number
                 description: Codigo de respuesta.
@@ -961,10 +961,10 @@ components:
           schema:
             type: object
             properties:
-              error:
+              message:
                 type: string
                 description: Describe el error encontrado.
-                example: "authentication error"
+                example: "Authentication error."
               status_code:
                 type: number
                 description: Codigo de respuesta.
@@ -976,10 +976,10 @@ components:
           schema:
             type: object
             properties:
-              error:
+              message:
                 type: string
                 description: Describe el error encontrado.
-                example: "not authorized"
+                example: "Not authorized."
               status_code:
                 type: number
                 description: Codigo de respuesta.
@@ -991,10 +991,10 @@ components:
           schema:
             type: object
             properties:
-              error_message:
+              message:
                 type: string
                 description: Describe el error encontrado.
-                example: "Customer or Tracking Number not found"
+                example: "Customer or Tracking Number not found."
               status_code:
                 type: number
                 description: Codigo de respuesta.
@@ -1006,10 +1006,10 @@ components:
           schema:
             type: object
             properties:
-              error_message:
+              message:
                 type: string
                 description: Describe el error encontrado.
-                example: "Internal (temporary) server error"
+                example: "Internal (temporary) server error."
               status_code:
                 type: number
                 description: Codigo de respuesta.
