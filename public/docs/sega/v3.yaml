@@ -669,13 +669,15 @@ components:
             
             Puede tomar los siguientes valores:
 
-            | Servicio (Todos los países) | Descripción |
-            | ------------- | ------------ |
-            | NEXTDAY | El pedido se enviará al día siguiente. |
-            | SAMEDAY | El pedido se enviará el mismo día. |
-            | ONEWEEK | El pedido se enviará a la semana siguiente. |
-            | TWOWEEKS | El pedido se enviará en las 2 semanas siguientes. |
-            | PICKUP_STORE | El pedido se colocara en un punto de recojo (retiro en tienda). |
+            | Código de servicio | Descripción |
+            | ------------------- | ----------- |
+            | NEXTDAY | El pedido se entregará al día siguiente. |
+            | SAMEDAY | El pedido se entregará el mismo día. |
+            | SAMEDAY_EXPRESS | El pedido se entregará el mismo día, con un tiempo estimado de entrega de 2 horas. |
+            | 48HOURS | El pedido se entregará dentro de las 48 horas siguientes. |
+            | ONEWEEK | El pedido se entregará durante la semana siguiente. |
+            | TWOWEEKS | El pedido se entregará dentro de las 2 semanas siguientes. |
+            | PICKUP_STORE | El pedido estará disponible para retiro en tienda o punto de recojo. |
 
             **Nota:** Paara el servicio 'NEXT DAY' se tiene una hora limite
             en el cual se realizara la entrega si se recibe antes de la hora 
@@ -819,12 +821,15 @@ components:
                       
                       Puede tomar los siguientes valores:
 
-                      | Servicio (Todos los países) | Descripción |
-                      | ------------- | ------------ |
-                      | NEXT DAY | El pedido se enviará al día siguiente. |
-                      | SAME DAY | El pedido se enviará el mismo día. |
-                      | ONEWEEK | El pedido se enviará a la semana siguiente. |
-                      | PICKUP_STORE | El pedido se colocara en un punto de recojo (retiro en tienda). |
+                      | Código de servicio | Descripción |
+                      | ------------------- | ----------- |
+                      | NEXTDAY | El pedido se entregará al día siguiente. |
+                      | SAMEDAY | El pedido se entregará el mismo día. |
+                      | SAMEDAY_EXPRESS | El pedido se entregará el mismo día, con un tiempo estimado de entrega de 2 horas. |
+                      | 48HOURS | El pedido se entregará dentro de las 48 horas siguientes. |
+                      | ONEWEEK | El pedido se entregará durante la semana siguiente. |
+                      | TWOWEEKS | El pedido se entregará dentro de las 2 semanas siguientes. |
+                      | PICKUP_STORE | El pedido estará disponible para retiro en tienda o punto de recojo. |
 
                       **Nota:** Paara el servicio 'NEXT DAY' se tiene una hora limite
                       en el cual se realizara la entrega si se recibe antes de la hora 
@@ -902,10 +907,15 @@ components:
                       
                       Puede tomar los siguientes valores:
 
-                      | Servicio (Todos los países) | Descripción |
-                      | ------------- | ------------ |
-                      | NEXT DAY | El pedido se enviará al día siguiente. |
-                      | SAME DAY | El pedido se enviará el mismo día. |
+                      | Código de servicio | Descripción |
+                      | ------------------- | ----------- |
+                      | NEXTDAY | El pedido se entregará al día siguiente. |
+                      | SAMEDAY | El pedido se entregará el mismo día. |
+                      | SAMEDAY_EXPRESS | El pedido se entregará el mismo día, con un tiempo estimado de entrega de 2 horas. |
+                      | 48HOURS | El pedido se entregará dentro de las 48 horas siguientes. |
+                      | ONEWEEK | El pedido se entregará durante la semana siguiente. |
+                      | TWOWEEKS | El pedido se entregará dentro de las 2 semanas siguientes. |
+                      | PICKUP_STORE | El pedido estará disponible para retiro en tienda o punto de recojo. |
 
                       **Nota:** Paara el servicio 'NEXT DAY' se tiene una hora limite
                       en el cual se realizara la entrega si se recibe antes de la hora 
@@ -1044,10 +1054,15 @@ components:
                   
                   Puede tomar los siguientes valores:
 
-                  | Servicio (Todos los países) | Descripción |
-                  | ------------- | ------------ |
-                  | NEXT DAY | El pedido se enviará al día siguiente. |
-                  | SAME DAY | El pedido se enviará el mismo día. |
+                  | Código de servicio | Descripción |
+                  | ------------------- | ----------- |
+                  | NEXTDAY | El pedido se entregará al día siguiente. |
+                  | SAMEDAY | El pedido se entregará el mismo día. |
+                  | SAMEDAY_EXPRESS | El pedido se entregará el mismo día, con un tiempo estimado de entrega de 2 horas. |
+                  | 48HOURS | El pedido se entregará dentro de las 48 horas siguientes. |
+                  | ONEWEEK | El pedido se entregará durante la semana siguiente. |
+                  | TWOWEEKS | El pedido se entregará dentro de las 2 semanas siguientes. |
+                  | PICKUP_STORE | El pedido estará disponible para retiro en tienda o punto de recojo. |
 
                   **Nota:** Paara el servicio 'NEXT DAY' se tiene una hora limite
                   en el cual se realizara la entrega si se recibe antes de la hora 
