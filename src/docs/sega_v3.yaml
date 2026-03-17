@@ -111,6 +111,14 @@ paths:
                   scope:
                     type: string
                     example: api:partner api:rates
+        400:
+          "$ref": "#/components/responses/responsePod400"
+        401:
+          "$ref": "#/components/responses/responsePod401"
+        403:
+          "$ref": "#/components/responses/responsePod403"
+        "500":
+          "$ref": "#/components/responses/responsePod500"
 
   "/shipments":
     post:
@@ -134,10 +142,14 @@ paths:
           "$ref": "#/components/responses/responseCreate200"
         400:
           "$ref": "#/components/responses/responsePod400"
+        401:
+          "$ref": "#/components/responses/responsePod401"
+        403:
+          "$ref": "#/components/responses/responsePod403"
         404:
           "$ref": "#/components/responses/responsePod404"
         "500":
-          "$ref": "#/components/responses/responseCreate500"
+          "$ref": "#/components/responses/responsePod500"
   "/shipments/{trackingNumber}/pod":
     parameters: 
       - "$ref": '#/components/parameters/trackingNumber'
@@ -156,10 +168,14 @@ paths:
           "$ref": "#/components/responses/responsePod200"
         400:
           "$ref": "#/components/responses/responsePod400"
+        401:
+          "$ref": "#/components/responses/responsePod401"
+        403:
+          "$ref": "#/components/responses/responsePod403"
         404:
           "$ref": "#/components/responses/responsePod404"
         "500":
-          "$ref": "#/components/responses/responseCreate500"
+          "$ref": "#/components/responses/responsePod500"
   "/shipments/{trackingNumber}/label":
     parameters: 
       - "$ref": '#/components/parameters/trackingNumber'
@@ -240,10 +256,14 @@ paths:
                 description: Código ZPL para impresora Zebra.
         400:
           "$ref": "#/components/responses/responsePod400"
+        401:
+          "$ref": "#/components/responses/responsePod401"
+        403:
+          "$ref": "#/components/responses/responsePod403"
         404:
           "$ref": "#/components/responses/responsePod404"
         "500":
-          "$ref": "#/components/responses/responseCreate500"
+          "$ref": "#/components/responses/responsePod500"
   "/shipments/{trackingNumber}/status":
     parameters: 
       - "$ref": '#/components/parameters/trackingNumber'
@@ -262,10 +282,14 @@ paths:
           "$ref": "#/components/responses/responseDetails200"
         400:
           "$ref": "#/components/responses/responsePod400"
+        401:
+          "$ref": "#/components/responses/responsePod401"
+        403:
+          "$ref": "#/components/responses/responsePod403"
         404:
           "$ref": "#/components/responses/responsePod404"
         "500":
-          "$ref": "#/components/responses/responseCreate500"
+          "$ref": "#/components/responses/responsePod500"
   
   "/rates/address":
     post:
@@ -320,10 +344,14 @@ paths:
           "$ref": "#/components/responses/responseRates200"
         400:
           "$ref": "#/components/responses/responsePod400"
+        401:
+          "$ref": "#/components/responses/responsePod401"
+        403:
+          "$ref": "#/components/responses/responsePod403"
         404:
           "$ref": "#/components/responses/responsePod404"
         "500":
-          "$ref": "#/components/responses/responseCreate500"
+          "$ref": "#/components/responses/responsePod500"
 
   "/rates/zip_code/{zipCode}/package_size/{size}":
     parameters: 
@@ -359,10 +387,14 @@ paths:
           "$ref": "#/components/responses/responseRates200"
         400:
           "$ref": "#/components/responses/responsePod400"
+        401:
+          "$ref": "#/components/responses/responsePod401"
+        403:
+          "$ref": "#/components/responses/responsePod403"
         404:
           "$ref": "#/components/responses/responsePod404"
         "500":
-          "$ref": "#/components/responses/responseCreate500"
+          "$ref": "#/components/responses/responsePod500"
 webhooks:
   updateStatus:
     post:
@@ -562,57 +594,67 @@ components:
           description: Tamaño promedio de los paquetes.
           example: "Chico"
         physicalAttributes:
-          "$ref": "#/components/schemas/physicalAttributes"
+          "$ref": "#/components/schemas/PhysicalAttributes"
       required:
         - description
-    physicalAttributes:
+    PhysicalAttributes:
       type: object
+      additionalProperties: false
       properties:
         dimensions:
-          type: object
-          properties:
-            height:
-              type: number
-              description: Altura promedio de los paquetes.
-              example: 0
-            width:
-              type: number
-              description: Ancho promedio de los paquetes.
-              example: 0
-            length:
-              type: number
-              description: Largo promedio de los paquetes.
-              example: 0
-            unit:
-              type: string
-              description: Unidad de los campos para dimensiones.
-              example: "cm"
+          $ref: "#/components/schemas/Dimensions"
         weight:
-          type: object
-          properties:
-            value:
-              type: number
-              description: Valor del peso.
-              example: 0
-            unit:
-              type: string
-              description: Unidad del peso.
-              example: "gr"
-    dimensions:
+          $ref: "#/components/schemas/Weight"
+    Weight:
       type: object
+      additionalProperties: false
+      required: [value, unit]
+      properties:
+        value:
+          type: number
+          description: Valor del peso. Debe ser mayor a 0.
+          exclusiveMinimum: 0
+          example: 1500
+        unit:
+          type: string
+          description: Unidad del peso.
+          example: gr
+    Dimensions:
+      type: object
+      additionalProperties: false
+      description: >
+        Si se envía dimensions, unit es obligatorio y se deben enviar al menos 2
+        de (height, width, length). Cualquier campo enviado debe ser mayor a 0.
+      required: [unit]
+      allOf:
+        # Regla: al menos 2 dimensiones presentes
+        - anyOf:
+            - title: "Height and Width"
+              required: [height, width]
+            - title: "Height and Length"
+              required: [height, length]
+            - title: "Width and Length"
+              required: [width, length]
       properties:
         height:
           type: number
-          description: Altura promedio de los paquetes.
-          example: 0
+          description: Altura. Si se envía, debe ser > 0.
+          exclusiveMinimum: 0
+          example: 10
         width:
           type: number
-          description: Ancho promedio de los paquetes.
-          example: 0
+          description: Ancho. Si se envía, debe ser > 0.
+          exclusiveMinimum: 0
+          example: 20
         length:
           type: number
-          description: Largo promedio de los paquetes.
-          example: 0
+          description: Largo. Si se envía, debe ser > 0.
+          exclusiveMinimum: 0
+          example: 30
+        unit:
+          type: string
+          description: Unidad de dimensiones.
+          example: cm
     shipment:
       type: object
       properties:
@@ -627,13 +669,15 @@ components:
             
             Puede tomar los siguientes valores:
 
-            | Servicio (Todos los países) | Descripción |
-            | ------------- | ------------ |
-            | NEXTDAY | El pedido se enviará al día siguiente. |
-            | SAMEDAY | El pedido se enviará el mismo día. |
-            | ONEWEEK | El pedido se enviará a la semana siguiente. |
-            | TWOWEEKS | El pedido se enviará en las 2 semanas siguientes. |
-            | PICKUP_STORE | El pedido se colocara en un punto de recojo (retiro en tienda). |
+            | Código de servicio | Descripción |
+            | ------------------- | ----------- |
+            | NEXTDAY | El pedido se entregará al día siguiente. |
+            | SAMEDAY | El pedido se entregará el mismo día. |
+            | SAMEDAY_EXPRESS | El pedido se entregará el mismo día, con un tiempo estimado de entrega de 2 horas. |
+            | 48HOURS | El pedido se entregará dentro de las 48 horas siguientes. |
+            | ONEWEEK | El pedido se entregará durante la semana siguiente. |
+            | TWOWEEKS | El pedido se entregará dentro de las 2 semanas siguientes. |
+            | PICKUP_STORE | El pedido estará disponible para retiro en tienda o punto de recojo. |
 
             **Nota:** Paara el servicio 'NEXT DAY' se tiene una hora limite
             en el cual se realizara la entrega si se recibe antes de la hora 
@@ -777,12 +821,15 @@ components:
                       
                       Puede tomar los siguientes valores:
 
-                      | Servicio (Todos los países) | Descripción |
-                      | ------------- | ------------ |
-                      | NEXT DAY | El pedido se enviará al día siguiente. |
-                      | SAME DAY | El pedido se enviará el mismo día. |
-                      | ONEWEEK | El pedido se enviará a la semana siguiente. |
-                      | PICKUP_STORE | El pedido se colocara en un punto de recojo (retiro en tienda). |
+                      | Código de servicio | Descripción |
+                      | ------------------- | ----------- |
+                      | NEXTDAY | El pedido se entregará al día siguiente. |
+                      | SAMEDAY | El pedido se entregará el mismo día. |
+                      | SAMEDAY_EXPRESS | El pedido se entregará el mismo día, con un tiempo estimado de entrega de 2 horas. |
+                      | 48HOURS | El pedido se entregará dentro de las 48 horas siguientes. |
+                      | ONEWEEK | El pedido se entregará durante la semana siguiente. |
+                      | TWOWEEKS | El pedido se entregará dentro de las 2 semanas siguientes. |
+                      | PICKUP_STORE | El pedido estará disponible para retiro en tienda o punto de recojo. |
 
                       **Nota:** Paara el servicio 'NEXT DAY' se tiene una hora limite
                       en el cual se realizara la entrega si se recibe antes de la hora 
@@ -860,10 +907,15 @@ components:
                       
                       Puede tomar los siguientes valores:
 
-                      | Servicio (Todos los países) | Descripción |
-                      | ------------- | ------------ |
-                      | NEXT DAY | El pedido se enviará al día siguiente. |
-                      | SAME DAY | El pedido se enviará el mismo día. |
+                      | Código de servicio | Descripción |
+                      | ------------------- | ----------- |
+                      | NEXTDAY | El pedido se entregará al día siguiente. |
+                      | SAMEDAY | El pedido se entregará el mismo día. |
+                      | SAMEDAY_EXPRESS | El pedido se entregará el mismo día, con un tiempo estimado de entrega de 2 horas. |
+                      | 48HOURS | El pedido se entregará dentro de las 48 horas siguientes. |
+                      | ONEWEEK | El pedido se entregará durante la semana siguiente. |
+                      | TWOWEEKS | El pedido se entregará dentro de las 2 semanas siguientes. |
+                      | PICKUP_STORE | El pedido estará disponible para retiro en tienda o punto de recojo. |
 
                       **Nota:** Paara el servicio 'NEXT DAY' se tiene una hora limite
                       en el cual se realizara la entrega si se recibe antes de la hora 
@@ -904,10 +956,44 @@ components:
           schema:
             type: object
             properties:
-              error:
+              message:
                 type: string
                 description: Describe el error encontrado.
-                example: "error getting pod: Package 6384179 must be delivered"
+                example: "Invalid request."
+              status_code:
+                type: number
+                description: Codigo de respuesta.
+                example: 400
+    "responsePod401":
+      description: Respuesta con errores.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Describe el error encontrado.
+                example: "Authentication error."
+              status_code:
+                type: number
+                description: Codigo de respuesta.
+                example: 401
+    "responsePod403":
+      description: Respuesta con errores.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Describe el error encontrado.
+                example: "Not authorized."
+              status_code:
+                type: number
+                description: Codigo de respuesta.
+                example: 403
     "responsePod404":
       description: Respuesta con errores.
       content:
@@ -915,14 +1001,29 @@ components:
           schema:
             type: object
             properties:
-              error_message:
+              message:
                 type: string
                 description: Describe el error encontrado.
-                example: "Shipment not found"
+                example: "Customer or Tracking Number not found."
               status_code:
                 type: number
                 description: Codigo de respuesta.
                 example: 404
+    "responsePod500":
+      description: Respuesta con errores.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Describe el error encontrado.
+                example: "Internal (temporary) server error."
+              status_code:
+                type: number
+                description: Codigo de respuesta.
+                example: 500
     "responsePod200":
       description: Se obtiene los detalles de entrega en base 64.
       content:
@@ -953,10 +1054,15 @@ components:
                   
                   Puede tomar los siguientes valores:
 
-                  | Servicio (Todos los países) | Descripción |
-                  | ------------- | ------------ |
-                  | NEXT DAY | El pedido se enviará al día siguiente. |
-                  | SAME DAY | El pedido se enviará el mismo día. |
+                  | Código de servicio | Descripción |
+                  | ------------------- | ----------- |
+                  | NEXTDAY | El pedido se entregará al día siguiente. |
+                  | SAMEDAY | El pedido se entregará el mismo día. |
+                  | SAMEDAY_EXPRESS | El pedido se entregará el mismo día, con un tiempo estimado de entrega de 2 horas. |
+                  | 48HOURS | El pedido se entregará dentro de las 48 horas siguientes. |
+                  | ONEWEEK | El pedido se entregará durante la semana siguiente. |
+                  | TWOWEEKS | El pedido se entregará dentro de las 2 semanas siguientes. |
+                  | PICKUP_STORE | El pedido estará disponible para retiro en tienda o punto de recojo. |
 
                   **Nota:** Paara el servicio 'NEXT DAY' se tiene una hora limite
                   en el cual se realizara la entrega si se recibe antes de la hora 

@@ -357,7 +357,7 @@ paths:
     parameters: 
       - name: zipCode
         in: path
-        description: Código postal de destino. *Actualmente válido solo para Argentina*
+        description: Código postal de destino. 
         required: true
         schema:
           type: string
@@ -376,7 +376,7 @@ paths:
       tags:
         - Rates
       summary: Obtener Tarifas por Código Postal y Tamaño de Paquete
-      description: Este endpoint permite obtener las tarifas de envío basadas en el código postal y el tamaño del paquete.**Actualmente válido solo para Argentina**
+      description: Este endpoint permite obtener las tarifas de envío basadas en el código postal y el tamaño del paquete.
       operationId: getRatesByZipCodeAndPackageSize
       security:
         - oauth2ClientCredentials:
@@ -621,7 +621,6 @@ components:
           example: gr
     Dimensions:
       type: object
-      additionalProperties: false
       description: >
         Si se envía dimensions, unit es obligatorio y se deben enviar al menos 2
         de (height, width, length). Cualquier campo enviado debe ser mayor a 0.
@@ -679,7 +678,7 @@ components:
             | TWOWEEKS | El pedido se entregará dentro de las 2 semanas siguientes. |
             | PICKUP_STORE | El pedido estará disponible para retiro en tienda o punto de recojo. |
 
-            **Nota:** Paara el servicio 'NEXT DAY' se tiene una hora limite
+            **Nota:** Para el servicio 'NEXT DAY' se tiene una hora limite
             en el cual se realizara la entrega si se recibe antes de la hora 
             límite, en caso contrario se enviará al día siguiente (La hora 
             límite se puede solicitar al área comercial).
@@ -831,7 +830,7 @@ components:
                       | TWOWEEKS | El pedido se entregará dentro de las 2 semanas siguientes. |
                       | PICKUP_STORE | El pedido estará disponible para retiro en tienda o punto de recojo. |
 
-                      **Nota:** Paara el servicio 'NEXT DAY' se tiene una hora limite
+                      **Nota:** Para el servicio 'NEXT DAY' se tiene una hora limite
                       en el cual se realizara la entrega si se recibe antes de la hora 
                       límite, en caso contrario se enviará al día siguiente (La hora 
                       límite se puede solicitar al área comercial).
@@ -854,7 +853,7 @@ components:
                             description: Tamaño promedio de los paquetes.
                             example: "Chico"
                           dimensions:
-                            "$ref": "#/components/schemas/dimensions"
+                            "$ref": "#/components/schemas/Dimensions"
                   origin:
                     "$ref": "#/components/responses/addressResponse"
                   destination:
@@ -917,7 +916,7 @@ components:
                       | TWOWEEKS | El pedido se entregará dentro de las 2 semanas siguientes. |
                       | PICKUP_STORE | El pedido estará disponible para retiro en tienda o punto de recojo. |
 
-                      **Nota:** Paara el servicio 'NEXT DAY' se tiene una hora limite
+                      **Nota:** Para el servicio 'NEXT DAY' se tiene una hora limite
                       en el cual se realizara la entrega si se recibe antes de la hora 
                       límite, en caso contrario se enviará al día siguiente (La hora 
                       límite se puede solicitar al área comercial).
@@ -929,13 +928,12 @@ components:
                   company:
                     type: string
                     description: Nombre asociado al marketplace.
-                    example: false
+                    example: "Partners api"
                   contact:
                     "$ref": "#/components/responses/contactResponse"
                   history:
                     type: array
                     items: 
-                      type: object
                       "$ref": "#/components/responses/historyResponse"
                   updatable:
                     type: boolean
@@ -1064,7 +1062,7 @@ components:
                   | TWOWEEKS | El pedido se entregará dentro de las 2 semanas siguientes. |
                   | PICKUP_STORE | El pedido estará disponible para retiro en tienda o punto de recojo. |
 
-                  **Nota:** Paara el servicio 'NEXT DAY' se tiene una hora limite
+                  **Nota:** Para el servicio 'NEXT DAY' se tiene una hora limite
                   en el cual se realizara la entrega si se recibe antes de la hora 
                   límite, en caso contrario se enviará al día siguiente (La hora 
                   límite se puede solicitar al área comercial).
@@ -1104,7 +1102,6 @@ components:
               history:
                 type: array
                 items: 
-                  type: object
                   "$ref": "#/components/responses/historyResponse"
     "responseRates200":
       description: Lista de tarifas disponibles para el envío.
@@ -1156,7 +1153,7 @@ components:
 
         - **zpl:** Etiqueta como texto en formato zpl (Zebra).
         - **pdf:** Etiqueta en formato PDF binario.
-        - **pdf_base64:** Etiqueta en formato PDF codificado en base64 dentro de un Json.s
+        - **pdf_base64:** Etiqueta en formato PDF codificado en base64 dentro de un Json.
 
         **Soporta**: ZPL, pdf_base64.
       style: form
